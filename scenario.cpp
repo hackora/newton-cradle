@@ -2,13 +2,15 @@
 
 #include "testtorus.h"
 
-
 // application
 #include "application/gmlibwrapper.h"
 #include "application/window.h"
 
 // hidmanager
 #include "hidmanager/defaulthidmanager.h"
+
+// scenemodel
+#include "tools/scenemodel.h"
 
 // gmlib
 #include <gmOpenglModule>
@@ -95,6 +97,10 @@ void Scenario::initializeScenario() {
   // Setup default hid-bindings
   hidmanager()->setupDefaultHidBindings();
 
+
+
+
+
   // Load QML
   window()->setSource( QUrl("qrc:/qml/main.qml") );
 
@@ -103,6 +109,9 @@ void Scenario::initializeScenario() {
   connect( hidmanager().get(), SIGNAL(signOpenCloseHidHelp()),           window()->rootObject(), SIGNAL(toggleHidBindView()) );
 
 
+  resetSceneModel();
+  qDebug() << "scene model row count: " << scenemodel()->rowCount();
+  qDebug() << "scene model column count: " << scenemodel()->columnCount();
 }
 
 void Scenario::cleanupScenario() {

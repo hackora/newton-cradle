@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/components/SceneExplorer.qml</file>
+    </qresource>
+</RCC>

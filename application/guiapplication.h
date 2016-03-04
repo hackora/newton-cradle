@@ -6,6 +6,7 @@ class Window;
 class GMlibWrapper;
 class GLContextSurfaceWrapper;
 class DefaultHidManager;
+class SceneModel;
 
 // gmlib
 namespace GMlib {
@@ -34,6 +35,7 @@ private:
   std::shared_ptr<GMlibWrapper>               _gmlib;
   std::shared_ptr<GLContextSurfaceWrapper>    _glsurface;
   std::shared_ptr<DefaultHidManager>          _hidmanager;
+  std::shared_ptr<SceneModel>                 _scenemodel;
 
   void                                        setupScene();
 
@@ -55,6 +57,9 @@ protected:
   std::shared_ptr<GLContextSurfaceWrapper>    glsurface();
   std::shared_ptr<DefaultHidManager>          hidmanager();
   std::shared_ptr<GMlib::Scene>               scene();
+  std::shared_ptr<SceneModel>                 scenemodel();
+
+  void                                        resetSceneModel();
 
 
 

@@ -9,6 +9,9 @@
 #include "../hidmanager/defaulthidmanager.h"
 #include "../hidmanager/hidmanagertreemodel.h"
 
+// scenemodel
+#include "../tools/scenemodel.h"
+
 // qt
 #include <QQmlContext>
 #include <QQuickItem>
@@ -67,6 +70,10 @@ GuiApplication::onSGInit() {
   _window->rootContext()->setContextProperty( "hidmanager_model", _hidmanager->getModel() );
   _window->rootContext()->setContextProperty( "rc_name_model", &_gmlib->rcNameModel() );
 
+  // Create scene model
+  _scenemodel = std::make_shared<SceneModel>( _gmlib );
+  _window->rootContext()->setContextProperty( "scene_model", _scenemodel.get() );
+
   connect( _window.get(), &Window::signMousePressed,       _hidmanager.get(), &StandardHidManager::registerMousePressEvent );
   connect( _window.get(), &Window::signMouseReleased,      _hidmanager.get(), &StandardHidManager::registerMouseReleaseEvent );
   connect( _window.get(), &Window::signMouseDoubleClicked, _hidmanager.get(), &StandardHidManager::registerMouseDoubleClickEvent);
@@ -122,6 +129,16 @@ std::shared_ptr<DefaultHidManager> GuiApplication::hidmanager() {
 std::shared_ptr<GMlib::Scene> GuiApplication::scene() {
 
   return _gmlib->scene();
+}
+
+std::shared_ptr<SceneModel> GuiApplication::scenemodel() {
+
+  return _scenemodel;
+}
+
+void GuiApplication::resetSceneModel() {
+
+  _scenemodel->revert();
 }
 
 const GuiApplication&

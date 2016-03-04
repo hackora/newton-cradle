@@ -72,6 +72,8 @@ set( HDRS
   application/window.h
   application/utils.h
 
+  tools/scenemodel.h
+
   testtorus.h
   scenario.h
   )
@@ -95,8 +97,9 @@ set( SRCS
   application/gmlibwrapper.cpp
   application/guiapplication.cpp
   application/window.cpp
-
   application/main.cpp
+
+  tools/scenemodel.cpp
 
   scenario.cpp
   )
@@ -119,11 +122,15 @@ QT5_WRAP_CPP( HDRS_MOC
   application/guiapplication.h
   application/window.h
 
+  tools/scenemodel.h
+
   scenario.h
   )
 
 set( RCCS
  application/application.qrc
+
+ tools/tools.qrc
 )
 
 QT5_ADD_RESOURCES( RCCS_MOC ${RCCS} )

@@ -35,6 +35,7 @@ Item {
     }
 
     Button {
+      id: hid_bind_view_button
       text: "?"
       anchors.top: parent.top
       anchors.right: parent.right
@@ -43,32 +44,67 @@ Item {
       width: height
       opacity: 0.7
 
-      onClicked: hid_bind_view.toggle()
+      onClicked: views.toggleState("hid_bind_view")
     }
 
-    HidBindingView {
-      id: hid_bind_view
+    Button {
+      text: "X"
+      anchors.top: parent.top
+      anchors.right: hid_bind_view_button.left
+      anchors.margins: 5
+
+      width: height
+      opacity: 0.7
+
+      onClicked: views.toggleState("scene_explorer")
+    }
+
+    Item {
+      id: views
       anchors.fill: parent
-      anchors.margins: 50
-      visible:false
+
+      HidBindingView {
+        id: hid_bind_view
+        anchors.fill: parent
+        anchors.margins: 50
+        visible:false
+      }
+
+      SceneExplorer {
+        id: scene_explorer
+        anchors.fill: parent
+        anchors.margins: 50
+        visible:false
+
+        states: [
+        ]
+      }
+
+      function toggleState(state_to_toggle) {
+
+        if(state === state_to_toggle) state = ""
+        else state = state_to_toggle
+
+      }
 
       states: [
         State{
-          name: "show"
+          name: "hid_bind_view"
           PropertyChanges {
             target: hid_bind_view
             visible: true
           }
+        },
+        State{
+          name: "scene_explorer"
+          PropertyChanges {
+            target: scene_explorer
+            visible: true
+          }
         }
       ]
-
-      function toggle() {
-
-        if(state === "") state = "show"
-        else state = ""
-
-      }
     }
+
 
 //    TextureViewer {
 
