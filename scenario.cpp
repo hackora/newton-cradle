@@ -83,8 +83,14 @@ void Scenario::initializeScenario() {
   auto surface = new TestTorus;
   surface->toggleDefaultVisualizer();
   surface->insertVisualizer(surface_visualizer);
-  surface->replot(200,200,1,1);
+  surface->replot(20,20,1,1);
   scene()->insert(surface);
+
+
+  auto erbs = new GMlib::PERBSSurf<float>( surface, 4, 4, 3, 3 );
+  erbs->toggleDefaultVisualizer();
+  erbs->replot(20,20,1,1);
+  surface->insert(erbs);
 
   surface->test01();
 
@@ -112,6 +118,7 @@ void Scenario::initializeScenario() {
   resetSceneModel();
   qDebug() << "scene model row count: " << scenemodel()->rowCount();
   qDebug() << "scene model column count: " << scenemodel()->columnCount();
+  qDebug() << "root objects in scene: " << scene()->getSize();
 }
 
 void Scenario::cleanupScenario() {

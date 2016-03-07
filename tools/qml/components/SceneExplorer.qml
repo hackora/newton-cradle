@@ -17,19 +17,26 @@ Rectangle {
     model: scene_model
 
     TableViewColumn {
-      title: "Name"
-      role: "name"
-    }
-
-    TableViewColumn {
+      role: 'identity'
       title: "Identity"
-      role: "identity"
     }
 
     TableViewColumn {
-      title: "0x"
-      role: "pointer"
+      role: 'name'
+      title: "Name"
     }
 
+    TableViewColumn {
+      role: 'pointer'
+      title: "0x"
+    }
+
+    TableViewColumn{
+      role: 'visible'
+      title: "Visible"
+//      delegate: Button {
+//        text: visible === true ? "V" : "I"
+//      }
+    }
   }
 }

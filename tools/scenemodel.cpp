@@ -5,6 +5,9 @@
 // gmlib
 #include <gmSceneModule>
 
+// qt
+#include <QDebug>
+
 SceneModel::SceneModel(std::shared_ptr<GMlibWrapper> gmlib) : _gmlib{gmlib} {}
 
 QModelIndex
@@ -13,10 +16,10 @@ SceneModel::index(int row, int column, const QModelIndex& parent) const {
   if( !hasIndex(row, column, parent) ) return QModelIndex();
 
   auto parent_so = static_cast<GMlib::SceneObject*>(!parent.isValid() ? nullptr : parent.internalPointer());
-  if(parent_so and row < scene()->getSize() )
-    return createIndex(row,column, scene()->operator[] (row));
+  if( !parent_so and row < scene()->getSize() )
+    return createIndex(row,column, scene()->operator[](row));
   else if( parent_so and row < parent_so->getChildren().size() )
-    return createIndex(row,column, scene()->operator[] (row));
+    return createIndex(row,column, parent_so->getChildren()(row));
   else
     return QModelIndex();
 }
@@ -50,7 +53,9 @@ SceneModel::rowCount(const QModelIndex& parent) const {
   if( !parent.isValid() )   return scene()->getSize();
 
   // else return number of children
-  else return static_cast<GMlib::SceneObject*>(parent.internalPointer())->getChildren().size();
+  auto parent_so = static_cast<GMlib::SceneObject*>(!parent.isValid() ? nullptr : parent.internalPointer());
+  if(parent_so) return parent_so->getChildren().size();
+  else scene()->getSize();
 }
 
 int
@@ -69,7 +74,6 @@ SceneModel::data(const QModelIndex& index, int role) const {
   switch(UserRoles(role)) {
     case UserRoles::Name:     return sceneobject->getName();
     case UserRoles::Identity: return sceneobject->getIdentity().c_str();
-//    case UserRoles::Pointer:  return reinterpret_cast<unsigned long int>(sceneobject);
     case UserRoles::Pointer:  return qulonglong(sceneobject);
     default:                  return QVariant("DEFAULT");
   }
