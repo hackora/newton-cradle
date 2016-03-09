@@ -57,19 +57,23 @@ SceneModel::parent(const QModelIndex& index) const {
   // If invalid, return empty QModelIndex (which evaluates to top-level)
   if(!index.isValid())  return QModelIndex();
 
-  auto child = static_cast<GMlib::SceneObject*>(index.internalPointer());
-  auto parent = child->getParent();
+  auto so = static_cast<GMlib::SceneObject*>(index.internalPointer());
+  auto parent_so = so->getParent();
 
-  // If no parent, return empty QModelIndex (which evaluates to top-level)
-  if(!parent) return QModelIndex();
-
-  // Find child index
-  const auto& pchildren = parent->getChildren();
-  int row;
-  for( row = 0; row < pchildren.size() or pchildren(row) == child; ++row );
-
-  auto parent_so = child->getParent();
+  // Invalid parent index if root of scene
   if(!parent_so) return QModelIndex();
+
+  // Find parent row
+  auto pparent_so = parent_so->getParent();
+  int row;
+  if( pparent_so ) {
+    for( row = 0; so != pparent_so->getChildren()(row); ++row );
+    if(row >= pparent_so->getChildren().size()) return QModelIndex(); // Catch if scene structure changes outside qtquick model
+  }
+  else {
+    for( row = 0; so != scene()->operator[](row); ++row );
+    if(row >= scene()->getSize()) return QModelIndex(); // Catch if scene structure changes outside qtquick model
+  }
 
   return createIndex(row,0,parent_so);
 }
@@ -113,12 +117,14 @@ SceneModel::data(const QModelIndex& index, int role) const {
 Qt::ItemFlags
 SceneModel::flags(const QModelIndex& index) const {
 
+//  if(!index.isValid()) return Qt::ItemIsEditable;
   if(!index.isValid()) return Qt::NoItemFlags;
 
   return QAbstractItemModel::flags(index);
 }
 
-QHash<int, QByteArray> SceneModel::roleNames() const {
+QHash<int, QByteArray>
+SceneModel::roleNames() const {
 
   QHash<int, QByteArray> role_names;
   role_names[int(UserRoles::Identity)]      = "so_identity";
@@ -129,7 +135,17 @@ QHash<int, QByteArray> SceneModel::roleNames() const {
   return role_names;
 }
 
-void SceneModel::stupidForceModelUpdate() {
+bool
+SceneModel::setData(const QModelIndex& index, const QVariant& value, int role) {
+
+  if(!index.isValid() and role == Qt::EditRole) return false;
+
+  auto sceneobject = static_cast<GMlib::SceneObject*>(index.internalPointer());
+  sceneobject->setVisible(value.toBool(), true);
+}
+
+void
+SceneModel::stupidForceModelUpdate() {
 
   beginResetModel(); {
     // This is what happens

@@ -19,17 +19,6 @@ TreeView {
     width: tree_view.viewport.width - visible_column.width
   }
 
-//  TableViewColumn{
-//    id: selected_column
-//    role: 'so_selected'
-//    title: "Selected"
-
-//    resizable: false
-//    movable: false
-
-//    width: 50
-//  }
-
   TableViewColumn{
     id: visible_column
     role: 'so_visible'
@@ -41,6 +30,9 @@ TreeView {
 
     delegate: Button {
       id: visible_button
+
+//      onClicked: tree_view.model.setData(styleData.index,!styleData.value)
+
       iconSource: styleData.value === true ? "qrc:/tools/gfx/visible" : "qrc:/tools/gfx/invisible"
       style: ButtonStyle {
         background: Item{}
@@ -54,6 +46,8 @@ TreeView {
 //                    }
 //                }
           }
+
     }
+
   }
 }
