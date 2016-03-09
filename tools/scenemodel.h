@@ -4,12 +4,18 @@
 
 
 // local
+namespace priv {
+
+  class SceneModelRoot;
+}
 class GMlibWrapper;
 
 // GMlib
 namespace GMlib {
   class Scene;
+  class SceneObject;
 }
+#include <core/gmarray>
 
 // Qt
 #include <QAbstractItemModel>
@@ -24,6 +30,16 @@ class SceneModel : public QAbstractItemModel {
 public:
   SceneModel( std::shared_ptr<GMlibWrapper> gmlib );
 
+
+
+  QModelIndex               indexFromSceneObject( GMlib::SceneObject* );
+
+
+
+
+
+
+
   // From QAbstractItemModel
   QModelIndex               index( int row, int column, const QModelIndex &parent = QModelIndex() ) const override;
   QModelIndex               parent( const QModelIndex &child ) const override;
@@ -34,18 +50,31 @@ public:
 
   QHash<int,QByteArray>     roleNames() const override;
 
+
+
+
+public slots:
+  void                      stupidForceModelUpdate();
+
 private:
   enum class UserRoles : int {
     Name = Qt::UserRole,
     Identity,
-    Pointer
+    Visible,
+    Selected,
+    MemoryAddress
   };
 
 
 
-  std::shared_ptr<GMlibWrapper>         _gmlib;
+  std::shared_ptr<GMlibWrapper>               _gmlib;
+
+  std::shared_ptr<priv::SceneModelRoot>       _root;
 
   const std::shared_ptr<GMlib::Scene>&        scene() const;
+
+  QModelIndex                                 findQmiFromSo( const GMlib::Array<GMlib::SceneObject*>& children,
+                                                             GMlib::SceneObject* obj_to_find ) const;
 };
 
 #endif // SCENEMODEL_H

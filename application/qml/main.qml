@@ -13,109 +13,120 @@ Item {
 
   onToggleHidBindView: hid_bind_view.toggle()
 
-  RCPairRenderer{
-    id: renderer
-
+  RowLayout {
     anchors.fill: parent
 
-    name: rc_pair_cb.currentText
+    SceneExplorer {
+      id: scene_explorer
 
-    ComboBox {
-      id: rc_pair_cb
-      anchors.top: parent.top
-      anchors.left: parent.left
-      anchors.margins: 5
+      Layout.fillHeight: true
+      width: 300
 
-      width: 128
+      anchors.margins: 50
+      visible:false
 
-      opacity: 0.7
-
-      model: rc_name_model
-      textRole: "display"
     }
 
-    Button {
-      id: hid_bind_view_button
-      text: "?"
-      anchors.top: parent.top
-      anchors.right: parent.right
-      anchors.margins: 5
 
-      width: height
-      opacity: 0.7
+    RCPairRenderer{
+      id: renderer
 
-      onClicked: views.toggleState("hid_bind_view")
-    }
+      Layout.fillHeight: true
+      Layout.fillWidth: true
 
-    Button {
-      text: "X"
-      anchors.top: parent.top
-      anchors.right: hid_bind_view_button.left
-      anchors.margins: 5
 
-      width: height
-      opacity: 0.7
+      name: rc_pair_cb.currentText
 
-      onClicked: views.toggleState("scene_explorer")
-    }
+      ComboBox {
+        id: rc_pair_cb
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.margins: 5
 
-    Item {
-      id: views
-      anchors.fill: parent
+        width: 128
 
-      HidBindingView {
-        id: hid_bind_view
+        opacity: 0.7
+
+        model: rc_name_model
+        textRole: "display"
+      }
+
+      Button {
+        id: hid_bind_view_button
+        text: "?"
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.margins: 5
+
+        width: height
+        opacity: 0.7
+
+        onClicked: root.toggleState("hid_bind_view")
+      }
+
+      Button {
+        text: "X"
+        anchors.top: parent.top
+        anchors.right: hid_bind_view_button.left
+        anchors.margins: 5
+
+        width: height
+        opacity: 0.7
+
+        onClicked: root.toggleState("scene_explorer")
+      }
+
+      Item {
+        id: views
         anchors.fill: parent
-        anchors.margins: 50
-        visible:false
-      }
 
-      SceneExplorer {
-        id: scene_explorer
-        anchors.fill: parent
-        anchors.margins: 50
-        visible:false
-
-        states: [
-        ]
-      }
-
-      function toggleState(state_to_toggle) {
-
-        if(state === state_to_toggle) state = ""
-        else state = state_to_toggle
-
-      }
-
-      states: [
-        State{
-          name: "hid_bind_view"
-          PropertyChanges {
-            target: hid_bind_view
-            visible: true
-          }
-        },
-        State{
-          name: "scene_explorer"
-          PropertyChanges {
-            target: scene_explorer
-            visible: true
-          }
+        HidBindingView {
+          id: hid_bind_view
+          anchors.fill: parent
+          anchors.margins: 50
+          visible:false
         }
-      ]
+
+      }
+
+
+  //    TextureViewer {
+
+  //      width:  256
+  //      height: 144
+
+  //      anchors.right:  parent.right
+  //      anchors.bottom: parent.bottom
+  //    }
+
     }
-
-
-//    TextureViewer {
-
-//      width:  256
-//      height: 144
-
-//      anchors.right:  parent.right
-//      anchors.bottom: parent.bottom
-//    }
 
   }
+
+  function toggleState(state_to_toggle) {
+
+    if(state === state_to_toggle) state = ""
+    else state = state_to_toggle
+
+  }
+
+
+  states: [
+    State{
+      name: "hid_bind_view"
+      PropertyChanges {
+        target: hid_bind_view
+        visible: true
+      }
+    },
+    State{
+      name: "scene_explorer"
+      PropertyChanges {
+        target: scene_explorer
+        visible: true
+      }
+    }
+  ]
 
 }
 

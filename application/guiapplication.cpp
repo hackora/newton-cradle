@@ -85,6 +85,9 @@ GuiApplication::onSGInit() {
   connect( _hidmanager.get(), &StandardHidManager::signBeforeHidAction, this,  &GuiApplication::beforeHidAction, Qt::DirectConnection );
   connect( _hidmanager.get(), &StandardHidManager::signAfterHidAction,  this,  &GuiApplication::afterHidAction );
 
+//  connect(_hidmanager.get(), &StandardHidManager::signAfterHidAction,   _scenemodel.get(), &SceneModel::stupidForceModelUpdate);
+  connect(_hidmanager.get(), &StandardHidManager::signAfterHidAction,   _scenemodel.get(), &SceneModel::revert);
+
   // Init test scene of the GMlib wrapper
   _glsurface->makeCurrent(); {
     initializeScenario();

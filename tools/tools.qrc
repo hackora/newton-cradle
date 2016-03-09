@@ -1,5 +1,11 @@
 <RCC>
     <qresource prefix="/">
         <file>qml/components/SceneExplorer.qml</file>
+        <file>qml/components/SceneView.qml</file>
+        <file>qml/components/SceneObjectView.qml</file>
+    </qresource>
+    <qresource prefix="/tools/gfx">
+        <file alias="visible">gfx/eye.png</file>
+        <file alias="invisible">gfx/eye_gray.png</file>
     </qresource>
 </RCC>
