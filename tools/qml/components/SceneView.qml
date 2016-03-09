@@ -16,19 +16,19 @@ TreeView {
     resizable: false
     movable: false
 
-    width: tree_view.viewport.width - (selected_column.width + visible_column.width)
+    width: tree_view.viewport.width - visible_column.width
   }
 
-  TableViewColumn{
-    id: selected_column
-    role: 'so_selected'
-    title: "Selected"
+//  TableViewColumn{
+//    id: selected_column
+//    role: 'so_selected'
+//    title: "Selected"
 
-    resizable: false
-    movable: false
+//    resizable: false
+//    movable: false
 
-    width: 50
-  }
+//    width: 50
+//  }
 
   TableViewColumn{
     id: visible_column
@@ -37,7 +37,7 @@ TreeView {
     resizable: false
     movable: false
 
-    width: 50
+    width: 65
 
     delegate: Button {
       id: visible_button

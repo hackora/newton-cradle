@@ -4,9 +4,10 @@
 
 
 // local
-namespace priv {
+namespace placeholders {
 
-  class SceneModelRoot;
+  class Root{};
+  class ComponentGroup{};
 }
 class GMlibWrapper;
 
@@ -58,10 +59,9 @@ public slots:
 
 private:
   enum class UserRoles : int {
-    Name = Qt::UserRole,
-    Identity,
+    Identity = Qt::UserRole + 1,
+    Name,
     Visible,
-    Selected,
     MemoryAddress
   };
 
@@ -69,7 +69,8 @@ private:
 
   std::shared_ptr<GMlibWrapper>               _gmlib;
 
-  std::shared_ptr<priv::SceneModelRoot>       _root;
+//  mutable placeholders::Root                          _root;
+
 
   const std::shared_ptr<GMlib::Scene>&        scene() const;
 
