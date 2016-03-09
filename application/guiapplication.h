@@ -7,6 +7,7 @@ class GMlibWrapper;
 class GLContextSurfaceWrapper;
 class DefaultHidManager;
 class SceneModel;
+class GMOpenGLProxyModel;
 
 // gmlib
 namespace GMlib {
@@ -36,6 +37,7 @@ private:
   std::shared_ptr<GLContextSurfaceWrapper>    _glsurface;
   std::shared_ptr<DefaultHidManager>          _hidmanager;
   std::shared_ptr<SceneModel>                 _scenemodel;
+  std::shared_ptr<GMOpenGLProxyModel>         _glmngmodel;
 
   void                                        setupScene();
 

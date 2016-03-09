@@ -11,6 +11,7 @@
 
 // scenemodel
 #include "../tools/scenemodel.h"
+#include "../tools/gmopenglproxymodel.h"
 
 // qt
 #include <QQmlContext>
@@ -73,6 +74,10 @@ GuiApplication::onSGInit() {
   // Create scene model
   _scenemodel = std::make_shared<SceneModel>( _gmlib );
   _window->rootContext()->setContextProperty( "scene_model", _scenemodel.get() );
+
+  // GM OpenGL manager proxy model
+  _glmngmodel = std::make_shared<GMOpenGLProxyModel>();
+  _window->rootContext()->setContextProperty( "glmng_model", _glmngmodel.get() );
 
   connect( _window.get(), &Window::signMousePressed,       _hidmanager.get(), &StandardHidManager::registerMousePressEvent );
   connect( _window.get(), &Window::signMouseReleased,      _hidmanager.get(), &StandardHidManager::registerMouseReleaseEvent );

@@ -73,6 +73,7 @@ set( HDRS
   application/utils.h
 
   tools/scenemodel.h
+  tools/gmopenglproxymodel.h
 
   testtorus.h
   scenario.h
@@ -100,6 +101,7 @@ set( SRCS
   application/main.cpp
 
   tools/scenemodel.cpp
+  tools/gmopenglproxymodel.cpp
 
   scenario.cpp
   )
@@ -123,6 +125,7 @@ QT5_WRAP_CPP( HDRS_MOC
   application/window.h
 
   tools/scenemodel.h
+  tools/gmopenglproxymodel.h
 
   scenario.h
   )
