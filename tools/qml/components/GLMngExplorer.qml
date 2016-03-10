@@ -5,6 +5,8 @@ import QtQuick.Layouts 1.1
 
 import "qrc:/qml/components"
 
+import MyCppComponents 1.0
+
 Rectangle {
   id: root
 
@@ -13,68 +15,99 @@ Rectangle {
   border.width: 5
   radius: 10
 
-  RowLayout {
+  SplitView {
+    id: splitview
     anchors.fill: parent
-    anchors.margins: 10
+    orientation: Qt.Vertical
 
     GLMngView {
       id: glmng_view
       selectionMode: SelectionMode.NoSelection
 
       Layout.fillHeight: true
-
       Layout.fillWidth: true
-//      implicitWidth: Math.min( parent.width / 3, 300 )
-
-
 
       model: glmng_model
 
-//      onClicked: {
-//        console.debug("current index changed: " +index)
-//        object_view.currentIndex = index.parent
+      onCurrentIndexChanged: {
+        details.displayIndexData(currentIndex)
+      }
+    }
+
+
+    Rectangle {
+      id: details
+
+      height: width
+      Layout.minimumHeight: width
+      Layout.fillWidth: true
+
+      TextureRenderer {
+        id: tex_renderer
+        opacity: 1.0
+
+        anchors.fill: parent
+
+      }
+
+
+      function displayIndexData(index) {
+
+        var obj_type = glmng_model.getGLObjectType(index)
+        console.debug("qmi type: " + obj_type );
+
+        if(obj_type !== 5) return;
+
+        var tex_id = glmng_model.getProperty(index,"texture_id");
+        tex_renderer.setTextureId(tex_id)
+
+      }
+
+//      ListView {
+//        anchors.fill: parent
+//          id: view
+////          width: 300
+////          height: 400
+
+//          model: DelegateModel {
+//              model:glmng_model
+
+//              delegate: Rectangle {
+//                  width: 200; height: 25
+//                  Text { text: display_name}
+
+//                  MouseArea {
+//                      anchors.fill: parent
+//                      onClicked: {
+//                          if (model.hasModelChildren)
+//                              view.model.rootIndex = view.model.modelIndex(index)
+//                      }
+//                  }
+//              }
+//          }
+//      }
+
+//      ListView {
+//        id: globj_view
+//        anchors.fill: parent
+//        model: DelegateModel {
+//          model: glmng_model
+//          delegate: Rectangle {
+//            width: globj_view.width
+//            height: globj_view.height
+//              Text{ text: display_name}
+//          }
+
+
+////          onRootIndexChanged: console.debug("Root index changed: " + rootIndex + " - " + count)
+//        }
+
+//        clip: true
+//        onCurrentIndexChanged: { contentY = currentItem.y }
+
 //      }
 
     }
-
-//    SceneObjectView {
-//      id: sceneobject_view
-//      Layout.fillHeight: true
-//      Layout.fillWidth: true
-
-//      model: scene_model
-//      rootIndex: scene_view.currentIndex
-
-//    }
-
-//    ColumnLayout {
-//      Layout.fillWidth: true
-//      Layout.fillHeight: true
-
-//      Repeater {
-//        id: rep
-//        model: DelegateModel {
-//          model: scene_model
-//          rootIndex: scene_view.currentIndex
-
-//          Rectangle{
-
-//            Layout.fillWidth: true
-//            implicitHeight: 30
-
-//            color: "yellow"
-
-
-
-//          }
-
-//          onRootIndexChanged: console.debug("rootIndexChanged (items: " + count + "); " + rootIndex + ", repeater count: " + rep.count)
-////          onRootIndexChanged: console.debug( "Root index: " + rootIndex + " has a count of:" + count )
-//        }
-//      }
-
-//      Item { Layout.fillHeight: true }
-//    }
   }
 
 }

@@ -34,6 +34,11 @@ public:
   GMOpenGLProxyModel();
 
 
+  Q_INVOKABLE int         getGLObjectType( const QModelIndex& index ) const;
+
+  Q_INVOKABLE QVariant    getProperty(const QModelIndex &index, const QString& name ) const;
+
+
   // From QAbstractItemModel
   QModelIndex             index(int row, int column, const QModelIndex &parent) const override;
   QModelIndex             parent(const QModelIndex &child) const override;
@@ -43,7 +48,6 @@ public:
 
   QHash<int,QByteArray>   roleNames() const override;
 
-
 private:
   enum class UserRoles : int {
     Id = Qt::UserRole + 1,
@@ -51,7 +55,6 @@ private:
     DisplayName,
     Icon
   };
-
 
   mutable placeholders::GL::ShadersAndPrograms    _shaders_and_programs;
   mutable placeholders::GL::Shaders               _shaders;
@@ -69,6 +72,16 @@ private:
 
   mutable placeholders::GL::Textures              _textures;
   mutable placeholders::GL::Texture               _texture;
+
+
+  template <typename T>
+  auto constexpr getGLObjetcInfoItrAt( const T& objinfo_list, int at ) -> decltype(objinfo_list.begin()) const {
+
+    auto itr = objinfo_list.begin();
+    for(int row = 0; row < at and itr != objinfo_list.end(); ++row, ++itr );
+
+    return itr;
+  }
 
 };
 

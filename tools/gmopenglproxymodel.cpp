@@ -22,6 +22,33 @@ GMOpenGLProxyModel::GMOpenGLProxyModel() {
 
 }
 
+int
+GMOpenGLProxyModel::getGLObjectType(const QModelIndex& index) const {
+
+  if(!index.isValid()) return -1;
+
+  if(     index.internalPointer() == &_shader)    return  0;
+  else if(index.internalPointer() == &_program)   return  1;
+  else if(index.internalPointer() == &_bo)        return  2;
+  else if(index.internalPointer() == &_fbo)       return  3;
+  else if(index.internalPointer() == &_rbo)       return  4;
+  else if(index.internalPointer() == &_texture)   return  5;
+  else                                            return -1;
+}
+
+QVariant
+GMOpenGLProxyModel::getProperty(const QModelIndex& index, const QString& name) const {
+
+  if(!index.isValid()) return QVariant();
+
+  if(index.internalPointer() == &_texture && name == "texture_id") {
+    auto itr = getGLObjetcInfoItrAt( GMlib::GL::Texture::getData(), index.row());
+    return itr->id;
+  }
+
+  return QVariant();
+}
+
 QModelIndex
 GMOpenGLProxyModel::index(int row, int column, const QModelIndex& parent) const {
 
@@ -146,12 +173,8 @@ GMOpenGLProxyModel::data(const QModelIndex& index, int role) const {
   }
   else if(index.internalPointer() == &_shader) {
 
-    const auto& data = GMlib::GL::Shader::getData();
-    auto itr = data.begin();
-    for(int row = 0; row < index.row() and itr != data.end(); ++row, ++itr );
-
-    if(itr == data.end()) return QVariant("out of bounds");
-
+    auto itr = getGLObjetcInfoItrAt( GMlib::GL::Shader::getData(), index.row());
+    if(itr == GMlib::GL::Shader::getData().end()) return QVariant("out of bounds");
     switch(UserRoles(role)) {
       case UserRoles::Id:               return itr->id;
       case UserRoles::Name:             return itr->name.c_str();
@@ -175,12 +198,8 @@ GMOpenGLProxyModel::data(const QModelIndex& index, int role) const {
   }
   else if(index.internalPointer() == &_program) {
 
-    const auto& data = GMlib::GL::Program::getData();
-    auto itr = data.begin();
-    for(int row = 0; row < index.row() and itr != data.end(); ++row, ++itr );
-
-    if(itr == data.end()) return QVariant("out of bounds");
-
+    auto itr = getGLObjetcInfoItrAt( GMlib::GL::Program::getData(), index.row());
+    if(itr == GMlib::GL::Program::getData().end()) return QVariant("out of bounds");
     switch(UserRoles(role)) {
       case UserRoles::Id:               return itr->id;
       case UserRoles::Name:             return itr->name.c_str();
@@ -197,12 +216,8 @@ GMOpenGLProxyModel::data(const QModelIndex& index, int role) const {
   }
   else if(index.internalPointer() == &_bo) {
 
-    const auto& data = GMlib::GL::BufferObject::getData();
-    auto itr = data.begin();
-    for(int row = 0; row < index.row() and itr != data.end(); ++row, ++itr );
-
-    if(itr == data.end()) return QVariant("out of bounds");
-
+    auto itr = getGLObjetcInfoItrAt( GMlib::GL::BufferObject::getData(), index.row());
+    if(itr == GMlib::GL::BufferObject::getData().end()) return QVariant("out of bounds");
     switch(UserRoles(role)) {
       case UserRoles::Id:               return itr->id;
       case UserRoles::Name:             return itr->name.c_str();
@@ -215,12 +230,8 @@ GMOpenGLProxyModel::data(const QModelIndex& index, int role) const {
   }
   else if(index.internalPointer() == &_fbo) {
 
-    const auto& data = GMlib::GL::FramebufferObject::getData();
-    auto itr = data.begin();
-    for(int row = 0; row < index.row() and itr != data.end(); ++row, ++itr );
-
-    if(itr == data.end()) return QVariant("out of bounds");
-
+    auto itr = getGLObjetcInfoItrAt( GMlib::GL::FramebufferObject::getData(), index.row());
+    if(itr == GMlib::GL::FramebufferObject::getData().end()) return QVariant("out of bounds");
     switch(UserRoles(role)) {
       case UserRoles::Id:               return itr->id;
       case UserRoles::Name:             return itr->name.c_str();
@@ -233,12 +244,8 @@ GMOpenGLProxyModel::data(const QModelIndex& index, int role) const {
   }
   else if(index.internalPointer() == &_rbo) {
 
-    const auto& data = GMlib::GL::RenderbufferObject::getData();
-    auto itr = data.begin();
-    for(int row = 0; row < index.row() and itr != data.end(); ++row, ++itr );
-
-    if(itr == data.end()) return QVariant("out of bounds");
-
+    auto itr = getGLObjetcInfoItrAt( GMlib::GL::RenderbufferObject::getData(), index.row());
+    if(itr == GMlib::GL::RenderbufferObject::getData().end()) return QVariant("out of bounds");
     switch(UserRoles(role)) {
       case UserRoles::Id:               return itr->id;
       case UserRoles::Name:             return itr->name.c_str();
@@ -251,12 +258,8 @@ GMOpenGLProxyModel::data(const QModelIndex& index, int role) const {
   }
   else if(index.internalPointer() == &_texture) {
 
-    const auto& data = GMlib::GL::Texture::getData();
-    auto itr = data.begin();
-    for(int row = 0; row < index.row() and itr != data.end(); ++row, ++itr );
-
-    if(itr == data.end()) return QVariant("out of bounds");
-
+    auto itr = getGLObjetcInfoItrAt( GMlib::GL::Texture::getData(), index.row());
+    if(itr == GMlib::GL::Texture::getData().end()) return QVariant("out of bounds");
     switch(UserRoles(role)) {
       case UserRoles::Id:               return itr->id;
       case UserRoles::Name:             return itr->name.c_str();
