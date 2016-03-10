@@ -142,6 +142,8 @@ SceneModel::setData(const QModelIndex& index, const QVariant& value, int role) {
 
   auto sceneobject = static_cast<GMlib::SceneObject*>(index.internalPointer());
   sceneobject->setVisible(value.toBool(), true);
+
+  emit dataChanged(index,index);
 }
 
 void
