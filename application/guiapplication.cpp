@@ -59,6 +59,7 @@ GuiApplication::onSGInit() {
   _window->initGLSurface();
   _glsurface = _window->glSurface();
 
+
   // Init GMlibWrapper
   _gmlib = std::make_shared<GMlibWrapper>(_glsurface);
   _gmlib->init();
@@ -66,18 +67,11 @@ GuiApplication::onSGInit() {
   connect( _window.get(), &Window::signRcPairViewportChanged,    _gmlib.get(),  &GMlibWrapper::changeRcPairViewport );
   connect( _window.get(), &Window::signRcPairActiveStateChanged, _gmlib.get(),  &GMlibWrapper::changeRcPairActiveState );
 
+
   // Create hidmanager
   _hidmanager = std::make_shared<DefaultHidManager>( _gmlib );
   _window->rootContext()->setContextProperty( "hidmanager_model", _hidmanager->getModel() );
   _window->rootContext()->setContextProperty( "rc_name_model", &_gmlib->rcNameModel() );
-
-  // Create scene model
-  _scenemodel = std::make_shared<SceneModel>( _gmlib );
-  _window->rootContext()->setContextProperty( "scene_model", _scenemodel.get() );
-
-  // GM OpenGL manager proxy model
-  _glmngmodel = std::make_shared<GMOpenGLProxyModel>();
-  _window->rootContext()->setContextProperty( "glmng_model", _glmngmodel.get() );
 
   connect( _window.get(), &Window::signMousePressed,       _hidmanager.get(), &StandardHidManager::registerMousePressEvent );
   connect( _window.get(), &Window::signMouseReleased,      _hidmanager.get(), &StandardHidManager::registerMouseReleaseEvent );
@@ -90,13 +84,25 @@ GuiApplication::onSGInit() {
   connect( _hidmanager.get(), &StandardHidManager::signBeforeHidAction, this,  &GuiApplication::beforeHidAction, Qt::DirectConnection );
   connect( _hidmanager.get(), &StandardHidManager::signAfterHidAction,  this,  &GuiApplication::afterHidAction );
 
+
+  // Create scene model
+  _scenemodel = std::make_shared<SceneModel>( _gmlib );
+  _window->rootContext()->setContextProperty( "scene_model", _scenemodel.get() );
+
 //  connect(_hidmanager.get(), &StandardHidManager::signAfterHidAction,   _scenemodel.get(), &SceneModel::stupidForceModelUpdate);
   connect(_hidmanager.get(), &StandardHidManager::signAfterHidAction,   _scenemodel.get(), &SceneModel::revert);
+
+
+  // GM OpenGL manager proxy model
+  _glmngmodel = std::make_shared<GMOpenGLProxyModel>();
+  _window->rootContext()->setContextProperty( "glmng_model", _glmngmodel.get() );
+
 
   // Init test scene of the GMlib wrapper
   _glsurface->makeCurrent(); {
     initializeScenario();
   } _glsurface->doneCurrent();
+
 
   // Start simulator
   _gmlib->start();

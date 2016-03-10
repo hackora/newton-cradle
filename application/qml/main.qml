@@ -1,13 +1,31 @@
-import QtQuick 2.1
+import QtQuick 2.2
 import QtQuick.Layouts 1.1
-import QtQuick.Controls 1.1
+import QtQuick.Controls 1.4
 
 import "qrc:/qml/components"
 
 import MyCppComponents 1.0
 
+
 Item {
   id: root
+
+  ListModel {
+    id: contactModel
+
+      ListElement {
+          name: "Bill Smith"
+          number: "555 3264"
+      }
+      ListElement {
+          name: "John Brown"
+          number: "555 8426"
+      }
+      ListElement {
+          name: "Sam Wise"
+          number: "555 0473"
+      }
+  }
 
   signal toggleHidBindView
 
@@ -20,12 +38,48 @@ Item {
       id: scene_explorer
 
       Layout.fillHeight: true
-      width: 300
+      width: 400
 
       anchors.margins: 50
       visible:false
 
     }
+
+    Rectangle {
+      id: glmng_view
+      Layout.fillHeight: true
+      width: 400
+
+      anchors.margins: 50
+      visible:false
+
+      TreeView {
+        anchors.fill: parent
+        model: glmng_model
+        focus: true
+
+        TableViewColumn {
+          title: "id"
+          role:  "display_name"
+        }
+      }
+    }
+
+    Rectangle {
+
+
+
+      ListView {
+        anchors.fill: parent
+    //      model: glmng_model
+        model: ListModel {
+          ListElement{ text: "hei"}
+          ListElement{ text: "paa"}
+          ListElement{ text: "deg"}
+        }
+      }
+    }
+
 
 
     RCPairRenderer{
@@ -65,6 +119,7 @@ Item {
       }
 
       Button {
+        id: scene_explorer_button
         text: "X"
         anchors.top: parent.top
         anchors.right: hid_bind_view_button.left
@@ -74,6 +129,18 @@ Item {
         opacity: 0.7
 
         onClicked: root.toggleState("scene_explorer")
+      }
+
+      Button {
+        text: "Y"
+        anchors.top: parent.top
+        anchors.right: scene_explorer_button.left
+        anchors.margins: 5
+
+        width: height
+        opacity: 0.7
+
+        onClicked: root.toggleState("glmng_view")
       }
 
       Item {
@@ -123,6 +190,13 @@ Item {
       name: "scene_explorer"
       PropertyChanges {
         target: scene_explorer
+        visible: true
+      }
+    },
+    State{
+      name: "glmng_view"
+      PropertyChanges {
+        target: glmng_view
         visible: true
       }
     }
