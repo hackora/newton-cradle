@@ -45,42 +45,15 @@ Item {
 
     }
 
-    Rectangle {
-      id: glmng_view
+    GLMngExplorer {
+      id: glmng_explorer
+
       Layout.fillHeight: true
       width: 400
 
       anchors.margins: 50
       visible:false
-
-      TreeView {
-        anchors.fill: parent
-        model: glmng_model
-        focus: true
-
-        TableViewColumn {
-          title: "id"
-          role:  "display_name"
-        }
-      }
     }
-
-    Rectangle {
-
-
-
-      ListView {
-        anchors.fill: parent
-    //      model: glmng_model
-        model: ListModel {
-          ListElement{ text: "hei"}
-          ListElement{ text: "paa"}
-          ListElement{ text: "deg"}
-        }
-      }
-    }
-
-
 
     RCPairRenderer{
       id: renderer
@@ -140,7 +113,7 @@ Item {
         width: height
         opacity: 0.7
 
-        onClicked: root.toggleState("glmng_view")
+        onClicked: root.toggleState("glmng_explorer")
       }
 
       Item {
@@ -194,9 +167,9 @@ Item {
       }
     },
     State{
-      name: "glmng_view"
+      name: "glmng_explorer"
       PropertyChanges {
-        target: glmng_view
+        target: glmng_explorer
         visible: true
       }
     }

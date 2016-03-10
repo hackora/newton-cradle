@@ -156,7 +156,18 @@ GMOpenGLProxyModel::data(const QModelIndex& index, int role) const {
       case UserRoles::Id:               return itr->id;
       case UserRoles::Name:             return itr->name.c_str();
       case UserRoles::DisplayName:      return QString("%1").arg(itr->id, 4) + (itr->name.size()?QString(" (%1)").arg(itr->name.c_str()):"");
+      case UserRoles::Icon: {
+        auto type = itr->type;
+        switch(type) {
+          case GL_VERTEX_SHADER:          return "VS";
+          case GL_TESS_CONTROL_SHADER:    return "TCS";
+          case GL_TESS_EVALUATION_SHADER: return "TES";
+          case GL_GEOMETRY_SHADER:        return "GS";
+          case GL_FRAGMENT_SHADER:        return "FS";
+        }
+      }
     }
+
   }
   else if(index.internalPointer() == &_programs) {
     if( UserRoles(role) == UserRoles::DisplayName ) return "Programs";
@@ -253,7 +264,7 @@ GMOpenGLProxyModel::data(const QModelIndex& index, int role) const {
     }
   }
 
-  return QVariant("BAH");
+  return QVariant();
 }
 
 QHash<int, QByteArray>
@@ -263,5 +274,6 @@ GMOpenGLProxyModel::roleNames() const {
   names[int(UserRoles::Id)]             = "id";
   names[int(UserRoles::Name)]           = "name";
   names[int(UserRoles::DisplayName)]    = "display_name";
+  names[int(UserRoles::Icon)]           = "icon";
   return names;
 }

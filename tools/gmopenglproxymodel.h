@@ -48,7 +48,8 @@ private:
   enum class UserRoles : int {
     Id = Qt::UserRole + 1,
     Name,
-    DisplayName
+    DisplayName,
+    Icon
   };
 
 
