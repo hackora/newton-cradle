@@ -14,7 +14,6 @@
 
 
 
-
 GMOpenGLProxyModel::GMOpenGLProxyModel() {
 
 
@@ -27,13 +26,13 @@ GMOpenGLProxyModel::getGLObjectType(const QModelIndex& index) const {
 
   if(!index.isValid()) return -1;
 
-  if(     index.internalPointer() == &_shader)    return  0;
-  else if(index.internalPointer() == &_program)   return  1;
-  else if(index.internalPointer() == &_bo)        return  2;
-  else if(index.internalPointer() == &_fbo)       return  3;
-  else if(index.internalPointer() == &_rbo)       return  4;
-  else if(index.internalPointer() == &_texture)   return  5;
-  else                                            return -1;
+  if(     index.internalPointer() == &_shader)    return  GLObjectType::Shader;
+  else if(index.internalPointer() == &_program)   return  GLObjectType::Program;
+  else if(index.internalPointer() == &_bo)        return  GLObjectType::Buffer;
+  else if(index.internalPointer() == &_fbo)       return  GLObjectType::Framebuffer;
+  else if(index.internalPointer() == &_rbo)       return  GLObjectType::Renderbuffer;
+  else if(index.internalPointer() == &_texture)   return  GLObjectType::Texture;
+  else                                            return  GLObjectType::Invalid;
 }
 
 QVariant
@@ -41,9 +40,53 @@ GMOpenGLProxyModel::getProperty(const QModelIndex& index, const QString& name) c
 
   if(!index.isValid()) return QVariant();
 
-  if(index.internalPointer() == &_texture && name == "texture_id") {
-    auto itr = getGLObjetcInfoItrAt( GMlib::GL::Texture::getData(), index.row());
-    return itr->id;
+  // Common object properties
+  // id
+  // name
+  // persistent
+  // valid
+  if( name == "id" or name == "name" or name == "count" or name == "persistent") {
+    if(     index.internalPointer() == &_shader)  return  getCommonGLObjectProperty( GMlib::GL::Shader::getData(),             index.row(), name );
+    else if(index.internalPointer() == &_program) return  getCommonGLObjectProperty( GMlib::GL::Program::getData(),            index.row(), name );
+    else if(index.internalPointer() == &_bo)      return  getCommonGLObjectProperty( GMlib::GL::BufferObject::getData(),       index.row(), name );
+    else if(index.internalPointer() == &_fbo)     return  getCommonGLObjectProperty( GMlib::GL::FramebufferObject::getData(),  index.row(), name );
+    else if(index.internalPointer() == &_rbo)     return  getCommonGLObjectProperty( GMlib::GL::RenderbufferObject::getData(), index.row(), name );
+    else if(index.internalPointer() == &_texture) return  getCommonGLObjectProperty( GMlib::GL::Texture::getData(),            index.row(), name );
+    else                                          return  QVariant();
+  }
+
+  if(     index.internalPointer() == &_shader)  return getShaderProperty(index,name);
+  else if(index.internalPointer() == &_texture) return getTextureProperty(index,name);
+
+  return QVariant();
+}
+
+QVariant
+GMOpenGLProxyModel::getTextureProperty(const QModelIndex& index, const QString& name) const {
+
+  auto itr = getGLObjetcInfoItrAt( GMlib::GL::Texture::getData(), index.row());
+
+  if(name == "target") {
+    GLenum trgt =  itr->target;
+    switch(trgt) {
+      case GL_TEXTURE_1D: return "GL_TEXTURE_1D";
+      case GL_TEXTURE_2D: return "GL_TEXTURE_2D";
+      case GL_TEXTURE_3D: return "GL_TEXTURE_3D";
+      default:            return trgt;              // Look it up gdmn'it (way to much legwork for now)
+    }
+  }
+
+  return QVariant();
+}
+
+QVariant GMOpenGLProxyModel::getShaderProperty(const QModelIndex& index, const QString& name) const {
+
+  auto itr = getGLObjetcInfoItrAt( GMlib::GL::Shader::getData(), index.row());
+  if(name=="source") {
+    GMlib::GL::Shader shader;
+    shader.acquire(itr->id);
+    qDebug() << "Source: " << shader.getSource().c_str();
+    return shader.getSource().c_str();
   }
 
   return QVariant();

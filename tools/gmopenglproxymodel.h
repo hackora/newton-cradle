@@ -39,6 +39,7 @@ public:
   Q_INVOKABLE QVariant    getProperty(const QModelIndex &index, const QString& name ) const;
 
 
+
   // From QAbstractItemModel
   QModelIndex             index(int row, int column, const QModelIndex &parent) const override;
   QModelIndex             parent(const QModelIndex &child) const override;
@@ -48,14 +49,27 @@ public:
 
   QHash<int,QByteArray>   roleNames() const override;
 
-private:
-  enum class UserRoles : int {
+  enum UserRoles : int {
     Id = Qt::UserRole + 1,
     Name,
     DisplayName,
     Icon
   };
+  Q_ENUM (UserRoles)
 
+  enum GLObjectType : int {
+    Invalid = 0,
+    Shader,
+    Program,
+    Buffer,
+    Framebuffer,
+    Renderbuffer,
+    Texture
+  };
+  Q_ENUM (GLObjectType)
+
+
+private:
   mutable placeholders::GL::ShadersAndPrograms    _shaders_and_programs;
   mutable placeholders::GL::Shaders               _shaders;
   mutable placeholders::GL::Shader                _shader;
@@ -74,6 +88,9 @@ private:
   mutable placeholders::GL::Texture               _texture;
 
 
+  QVariant                getTextureProperty(const QModelIndex& index, const QString& name ) const;
+  QVariant                getShaderProperty(const QModelIndex& index, const QString& name ) const;
+
   template <typename T>
   auto constexpr getGLObjetcInfoItrAt( const T& objinfo_list, int at ) -> decltype(objinfo_list.begin()) const {
 
@@ -81,6 +98,18 @@ private:
     for(int row = 0; row < at and itr != objinfo_list.end(); ++row, ++itr );
 
     return itr;
+  }
+
+  template <typename T>
+  QVariant constexpr getCommonGLObjectProperty( const T& objinfo_list, int at, const QString& name) const {
+
+    auto itr = getGLObjetcInfoItrAt(objinfo_list,at);
+
+    if(     name == "id")         return itr->id;
+    else if(name == "name")       return itr->name.c_str();
+    else if(name == "count")      return itr->counter;
+    else if(name == "persistent") return itr->persistent;
+    else                          return QVariant();
   }
 
 };

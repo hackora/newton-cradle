@@ -30,10 +30,13 @@ class GLContextSurfaceWrapper;
 
 
 
+
 class TextureRenderer : public Renderer {
   Q_OBJECT
-  Q_PROPERTY(QStringList  textureIds    READ textureIds   NOTIFY signTextureIdsChanged )
-  Q_PROPERTY(QStringList  textureNames  READ textureNames NOTIFY signTextureIdsChanged )
+  Q_PROPERTY(uint         textureId       READ textureId       WRITE setTextureId )
+  Q_PROPERTY(QStringList  textureIds      READ textureIds                           NOTIFY signTextureIdsChanged )
+  Q_PROPERTY(QStringList  textureNames    READ textureNames                         NOTIFY signTextureIdsChanged )
+  Q_PROPERTY(bool         beforeRendering READ beforeRendering WRITE setBeforeRendering )
 
 
 public:
@@ -45,8 +48,12 @@ public:
   Q_INVOKABLE void        setColorMagnification( int magn );
 
 
+  uint                    textureId() const;
   QStringList             textureIds() const;
   QStringList             textureNames() const;
+
+  bool                    beforeRendering() const;
+  void                    setBeforeRendering(bool state );
 
 public slots:
   void                    sync();
@@ -60,6 +67,8 @@ private:
   GMlib::GL::Texture      _tex;
   GMlib::GL::Program      _prog;
   int                     _color_magn {1};
+
+  bool                    _before_rendering {true};
 
   void                    initTexMagnProg();
 

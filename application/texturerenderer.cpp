@@ -40,6 +40,12 @@ TextureRenderer::setColorMagnification(int magn) {
   _color_magn = magn;
 }
 
+uint
+TextureRenderer::textureId() const {
+
+  return _tex.getId();
+}
+
 QStringList
 TextureRenderer::textureIds() const {
 
@@ -58,6 +64,18 @@ TextureRenderer::textureNames() const {
   return ids;
 }
 
+bool
+TextureRenderer::beforeRendering() const {
+
+  return _before_rendering;
+}
+
+void
+TextureRenderer::setBeforeRendering(bool state) {
+
+  _before_rendering = state;
+}
+
 void
 TextureRenderer::sync() {
 
@@ -67,7 +85,10 @@ TextureRenderer::sync() {
 
     Window *w = static_cast<Window*>(window());
     _glsurface = w->glSurface();
-    connect( w, &Window::beforeRendering, this, &TextureRenderer::paint, Qt::DirectConnection );
+    if(_before_rendering)
+      connect( w, &Window::beforeRendering, this, &TextureRenderer::paint, Qt::DirectConnection );
+    else
+      connect( w, &Window::afterRendering, this, &TextureRenderer::paint, Qt::DirectConnection );
   }
 
   if( !prog_valid )
@@ -164,12 +185,12 @@ void
 TextureRenderer::paint() {
 
   if(!_tex.isValid()) return;
+  if(!isVisible()) return;
 
   initCanvasAndProg();
   initTexMagnProg();
 
   GL_CHECK(::glViewport(_viewport.x(), _viewport.y(), _viewport.width(), _viewport.height()));
-
   GL_CHECK(::glDisable(GL_BLEND));
   _prog.bind(); {
 

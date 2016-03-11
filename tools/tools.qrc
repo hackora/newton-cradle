@@ -5,6 +5,9 @@
         <file>qml/components/SceneObjectView.qml</file>
         <file>qml/components/GLMngView.qml</file>
         <file>qml/components/GLMngExplorer.qml</file>
+        <file>qml/components/TextureDetails.qml</file>
+        <file>qml/components/DetailsHeader.qml</file>
+        <file>qml/components/ShaderDetails.qml</file>
     </qresource>
     <qresource prefix="/tools/gfx">
         <file alias="visible">gfx/eye.png</file>

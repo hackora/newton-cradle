@@ -10,11 +10,6 @@ import MyCppComponents 1.0
 Rectangle {
   id: root
 
-  opacity: 0.7
-  border.color: "black"
-  border.width: 5
-  radius: 10
-
   SplitView {
     id: splitview
     anchors.fill: parent
@@ -37,75 +32,54 @@ Rectangle {
 
     Rectangle {
       id: details
-
       height: width
       Layout.minimumHeight: width
       Layout.fillWidth: true
 
-      TextureRenderer {
-        id: tex_renderer
-        opacity: 1.0
-
-        anchors.fill: parent
-
-      }
-
-
       function displayIndexData(index) {
 
         var obj_type = glmng_model.getGLObjectType(index)
-        console.debug("qmi type: " + obj_type );
+        var enum_tex = GMOpenGLProxyModel.Texture;
+        var obj_type_eq_enum_tex = obj_type === enum_tex;
 
-        if(obj_type !== 5) return;
-
-        var tex_id = glmng_model.getProperty(index,"texture_id");
-        tex_renderer.setTextureId(tex_id)
-
+        switch(obj_type) {
+          case GMOpenGLProxyModel.Shader:
+            details.state = "shader"
+            shader_details.index = index
+            break
+          case GMOpenGLProxyModel.Texture:
+            details.state = "texture"
+            texture_details.index = index
+            break
+          default:
+            details.state = ""
+        }
       }
 
-//      ListView {
-//        anchors.fill: parent
-//          id: view
-////          width: 300
-////          height: 400
+      ShaderDetails {
+        id: shader_details
+        anchors.fill: parent
+        model: glmng_model
+        visible: false
+      }
 
-//          model: DelegateModel {
-//              model:glmng_model
+      TextureDetails {
+        id: texture_details
+        anchors.fill: parent
+        model: glmng_model
+        visible: false
+      }
 
-//              delegate: Rectangle {
-//                  width: 200; height: 25
-//                  Text { text: display_name}
-
-//                  MouseArea {
-//                      anchors.fill: parent
-//                      onClicked: {
-//                          if (model.hasModelChildren)
-//                              view.model.rootIndex = view.model.modelIndex(index)
-//                      }
-//                  }
-//              }
-//          }
-//      }
-
-//      ListView {
-//        id: globj_view
-//        anchors.fill: parent
-//        model: DelegateModel {
-//          model: glmng_model
-//          delegate: Rectangle {
-//            width: globj_view.width
-//            height: globj_view.height
-//              Text{ text: display_name}
-//          }
-
-
-////          onRootIndexChanged: console.debug("Root index changed: " + rootIndex + " - " + count)
-//        }
-
-//        clip: true
-//        onCurrentIndexChanged: { contentY = currentItem.y }
-
-//      }
+      states: [
+        State{
+          name: "shader"
+          PropertyChanges { target: shader_details;          visible: true }
+        },
+        State{
+          name: "texture"
+          PropertyChanges { target: texture_details;          visible: true }
+        }
+      ]
 
     }
   }

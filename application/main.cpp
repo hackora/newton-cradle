@@ -2,6 +2,7 @@
 #include "../scenario.h"
 #include "rcpairrenderer.h"
 #include "texturerenderer.h"
+#include "../tools/gmopenglproxymodel.h"
 
 // gmlib
 #include <core/gmglobal>
@@ -42,8 +43,9 @@ int main(int argc, char *argv[]) try {
     qDebug() << QString( "GMlib version: %1" ).arg( GM_VERSION_STR ).toStdString().c_str();
 
   // Register modules
-  qmlRegisterType<RCPairRenderer>( "MyCppComponents", 1, 0, "RCPairRenderer" );
-  qmlRegisterType<TextureRenderer>( "MyCppComponents", 1, 0, "TextureRenderer" );
+  qmlRegisterType<RCPairRenderer>(     "MyCppComponents", 1, 0, "RCPairRenderer" );
+  qmlRegisterType<TextureRenderer>(    "MyCppComponents", 1, 0, "TextureRenderer" );
+  qmlRegisterType<GMOpenGLProxyModel>( "MyCppComponents", 1, 0, "GMOpenGLProxyModel" );
 
 
   // Create the application object
