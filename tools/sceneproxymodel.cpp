@@ -36,6 +36,23 @@ QModelIndex SceneProxyModel::indexFromSceneObject(GMlib::SceneObject* so_to_find
 
 }
 
+QVariant
+SceneProxyModel::getSceneProperty(const QString& name) const {
+
+  if(name == "running_status" ) return scene()->isRunning();
+
+  return QVariant();
+}
+
+bool
+SceneProxyModel::setSceneProperty(const QString& name, const QString& value) {
+  Q_UNUSED(name)
+  Q_UNUSED(value)
+
+
+  return false;
+}
+
 QVariantList
 SceneProxyModel::getPropertyModules(const QModelIndex& index) const {
 

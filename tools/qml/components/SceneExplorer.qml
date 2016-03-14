@@ -92,9 +92,9 @@ Rectangle {
             Layout.fillWidth: true
             columns: 2
 
-            Text{ text: "Clear color" }     Text{ text: "#color" }
-            Text{ text: "Running"     }     Button{ text: "$status" }
+            Text{ text: "Running"     }     Text{ text: "I don't care..." }
           }
+
           Item{
             Layout.fillHeight: true
           }

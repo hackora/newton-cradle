@@ -35,10 +35,12 @@ public:
 
   QModelIndex                   indexFromSceneObject( GMlib::SceneObject* );
 
+  Q_INVOKABLE virtual QVariant  getSceneProperty( const QString& name ) const;
+  Q_INVOKABLE virtual bool      setSceneProperty( const QString& name, const QString& value );
 
   Q_INVOKABLE QVariantList      getPropertyModules( const QModelIndex& index ) const;
-  Q_INVOKABLE virtual QVariant  getProperty( const QModelIndex& index, int module, const QString& name ) const;
 
+  Q_INVOKABLE virtual QVariant  getProperty( const QModelIndex& index, int module, const QString& name ) const;
   QVariant                      getSceneObjectProperty( const GMlib::SceneObject& sceneobject, const QString& name ) const;
 
 
