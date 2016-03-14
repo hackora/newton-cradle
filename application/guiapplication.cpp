@@ -94,7 +94,7 @@ GuiApplication::onSGInit() {
 
 
   // GM OpenGL manager proxy model
-  _glmngmodel = std::make_shared<GMOpenGLProxyModel>();
+  _glmngmodel = std::make_shared<GMOpenGLProxyModel>(_glsurface);
   _window->rootContext()->setContextProperty( "glmng_model", _glmngmodel.get() );
 
 

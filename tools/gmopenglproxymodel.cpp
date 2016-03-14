@@ -1,5 +1,6 @@
 #include "gmopenglproxymodel.h"
 
+#include "../application/glcontextsurfacewrapper.h"
 
 // gmlib
 #include <gmOpenglModule>
@@ -14,12 +15,8 @@
 
 
 
-GMOpenGLProxyModel::GMOpenGLProxyModel() {
-
-
-
-
-}
+GMOpenGLProxyModel::GMOpenGLProxyModel(std::shared_ptr<GLContextSurfaceWrapper> glsurface)
+  : _glsurface{glsurface} {}
 
 int
 GMOpenGLProxyModel::getGLObjectType(const QModelIndex& index) const {
@@ -56,9 +53,14 @@ GMOpenGLProxyModel::getProperty(const QModelIndex& index, const QString& name) c
   }
 
   if(     index.internalPointer() == &_shader)  return getShaderProperty(index,name);
+  else if(index.internalPointer() == &_program) return getProgramProperty(index,name);
   else if(index.internalPointer() == &_texture) return getTextureProperty(index,name);
 
   return QVariant();
+}
+
+void GMOpenGLProxyModel::setProperty(const QModelIndex& index, const QString& name, QVariant) {
+
 }
 
 QVariant
@@ -83,11 +85,37 @@ QVariant GMOpenGLProxyModel::getShaderProperty(const QModelIndex& index, const Q
 
   auto itr = getGLObjetcInfoItrAt( GMlib::GL::Shader::getData(), index.row());
   if(name=="source") {
-    GMlib::GL::Shader shader;
-    shader.acquire(itr->id);
-    qDebug() << "Source: " << shader.getSource().c_str();
-    return shader.getSource().c_str();
+
+    const GLuint id = itr->id;
+    std::vector<char> buff;
+
+    _glsurface->makeCurrent(); {
+
+      int length;
+      GL_CHECK(::glGetShaderiv( id, GL_SHADER_SOURCE_LENGTH, &length ));
+      length++;
+
+      int read;
+      buff.resize(length);
+      GL_CHECK(::glGetShaderSource( id, length, &read, buff.data() ));
+
+    } _glsurface->doneCurrent();
+
+    return std::string( buff.data() ).c_str();
   }
+
+  return QVariant();
+}
+
+QVariant GMOpenGLProxyModel::getProgramProperty(const QModelIndex& index, const QString& name) const {
+
+  auto itr = getGLObjetcInfoItrAt( GMlib::GL::Program::getData(), index.row());
+//  if(name=="source") {
+//    GMlib::GL::Program prog;
+//    prog.acquire(itr->id);
+//    qDebug() << "Source: " << prog.getSource().c_str();
+//    return prog.getSource().c_str();
+//  }
 
   return QVariant();
 }

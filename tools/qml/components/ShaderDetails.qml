@@ -26,23 +26,54 @@ Item {
       model : root.model
     }
 
-    Rectangle {
+    Item {
       id: shader_item
       Layout.fillWidth: true
       Layout.fillHeight: true
-      border.color: "black"
-      border.width: 3
+//      border.color: "black"
+//      border.width: 3
 
-      TextEdit {
-        id: source
+      ColumnLayout {
         anchors.fill: parent
-        readOnly: true
-        font.family: "Mono"
+
+        RowLayout {
+
+          Layout.fillWidth: true
+
+          height: 20
+
+          Item { Layout.fillWidth: true}
+          Button{ text: "Build"}
+          Button{ text: "+"; implicitWidth: height; onClicked: source.font.pointSize = source.font.pointSize+1}
+          Button{ text: "-"; implicitWidth: height; onClicked: source.font.pointSize = source.font.pointSize-1}
+          Item { width: 5 }
+
+        }
+
+        ScrollView {
+          Layout.fillWidth: true
+          Layout.fillHeight: true
+
+          TextEdit {
+            id: source
+  //          readOnly: true
+            font.family: "Mono"
+            font.pointSize: 9
+
+            textMargin: 10
+
+            GLSLSyntaxHighlighter {
+              id: highlighter
+            }
+
+          }
+        }
       }
     }
   }
 
   onIndexChanged: {
     source.text = root.model.getProperty(root.index, "source")
+    highlighter.setQuickTextDocument(source.textDocument);
   }
 }

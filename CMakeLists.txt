@@ -74,6 +74,8 @@ set( HDRS
 
   tools/scenemodel.h
   tools/gmopenglproxymodel.h
+  tools/syntaxhighlighter.h
+  tools/glslsyntaxhighlighter.h
 
   testtorus.h
   scenario.h
@@ -102,6 +104,8 @@ set( SRCS
 
   tools/scenemodel.cpp
   tools/gmopenglproxymodel.cpp
+  tools/syntaxhighlighter.cpp
+  tools/glslsyntaxhighlighter.cpp
 
   scenario.cpp
   )
@@ -126,6 +130,8 @@ QT5_WRAP_CPP( HDRS_MOC
 
   tools/scenemodel.h
   tools/gmopenglproxymodel.h
+  tools/syntaxhighlighter.h
+  tools/glslsyntaxhighlighter.h
 
   scenario.h
   )

@@ -1,9 +1,27 @@
 #ifndef GMOPENGLPROXYMODEL_H
 #define GMOPENGLPROXYMODEL_H
 
+
+// local
+class GLContextSurfaceWrapper;
+
+
+
 // Qt
 #include <QAbstractItemModel>
 
+
+// stl
+#include <memory>
+
+
+
+
+
+
+
+
+// Helper classes
 namespace placeholders {
 
   namespace GL {
@@ -27,16 +45,16 @@ namespace placeholders {
   }
 }
 
-
 class GMOpenGLProxyModel : public QAbstractItemModel {
   Q_OBJECT
 public:
-  GMOpenGLProxyModel();
+  GMOpenGLProxyModel(std::shared_ptr<GLContextSurfaceWrapper> glsurface = nullptr);
 
 
   Q_INVOKABLE int         getGLObjectType( const QModelIndex& index ) const;
 
-  Q_INVOKABLE QVariant    getProperty(const QModelIndex &index, const QString& name ) const;
+  Q_INVOKABLE QVariant    getProperty(const QModelIndex& index, const QString& name ) const;
+  Q_INVOKABLE void        setProperty(const QModelIndex& index, const QString& name, QVariant );
 
 
 
@@ -70,6 +88,8 @@ public:
 
 
 private:
+  std::shared_ptr<GLContextSurfaceWrapper>        _glsurface;
+
   mutable placeholders::GL::ShadersAndPrograms    _shaders_and_programs;
   mutable placeholders::GL::Shaders               _shaders;
   mutable placeholders::GL::Shader                _shader;
@@ -79,17 +99,18 @@ private:
   mutable placeholders::GL::BufferObjects         _buffer_objects;
   mutable placeholders::GL::BOs                   _bos;
   mutable placeholders::GL::BO                    _bo;
-  mutable placeholders::GL::RBOs                  _rbos;
-  mutable placeholders::GL::RBO                   _rbo;
   mutable placeholders::GL::FBOs                  _fbos;
   mutable placeholders::GL::FBO                   _fbo;
+  mutable placeholders::GL::RBOs                  _rbos;
+  mutable placeholders::GL::RBO                   _rbo;
 
   mutable placeholders::GL::Textures              _textures;
   mutable placeholders::GL::Texture               _texture;
 
 
-  QVariant                getTextureProperty(const QModelIndex& index, const QString& name ) const;
   QVariant                getShaderProperty(const QModelIndex& index, const QString& name ) const;
+  QVariant                getProgramProperty(const QModelIndex& index, const QString& name ) const;
+  QVariant                getTextureProperty(const QModelIndex& index, const QString& name ) const;
 
   template <typename T>
   auto constexpr getGLObjetcInfoItrAt( const T& objinfo_list, int at ) -> decltype(objinfo_list.begin()) const {
