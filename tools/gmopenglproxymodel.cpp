@@ -59,8 +59,123 @@ GMOpenGLProxyModel::getProperty(const QModelIndex& index, const QString& name) c
   return QVariant();
 }
 
-void GMOpenGLProxyModel::setProperty(const QModelIndex& index, const QString& name, QVariant) {
+bool
+GMOpenGLProxyModel::setProperty(const QModelIndex& index, const QString& name, const QVariant& data) {
 
+  if(!index.isValid()) return false;
+
+  if(index.internalPointer() == &_shader)  return setShaderProperty(index,name,data);
+
+  return false;
+}
+
+bool
+GMOpenGLProxyModel::setShaderProperty(const QModelIndex& index, const QString& name, const QVariant& data) {
+
+
+  auto itr = getGLObjetcInfoItrAt( GMlib::GL::Shader::getData(), index.row());
+
+  GLCSWMakeCurrent context(_glsurface);
+  context.makeCurrent();
+
+  auto shader_id = itr->id;
+
+  if(name=="source") {
+
+    auto source_std = data.toString().toStdString();
+    const char* source = source_std.c_str();
+
+    // set source
+    GL_CHECK(::glShaderSource(shader_id, 1, &source, 0x0) );
+
+    // compile
+    GL_CHECK(::glCompileShader( shader_id ));
+
+    // check if compile is ok
+    int compile_ok;
+    GL_CHECK(::glGetShaderiv( shader_id, GL_COMPILE_STATUS, &compile_ok ));
+
+    if(compile_ok != GL_TRUE) {
+
+      qDebug() << "Compile failed!!!!";
+
+      int len = 0;
+      int written = 0;
+      char *log;
+
+      GL_CHECK(::glGetShaderiv( shader_id, GL_INFO_LOG_LENGTH, &len ));
+
+      if( len > 0 ) {
+
+        len = len+1;
+        log = new char[len];
+        GL_CHECK(::glGetShaderInfoLog( shader_id, len, &written, log ));
+        qDebug() << "Compiler log: " << log;
+        delete log;
+
+        qDebug() << "SOURCE: " << source;
+      }
+
+      return false;
+    }
+
+    auto programs = GMlib::GL::Program::getData();
+    for( auto prog_itr : programs ) {
+
+      auto prog_id = prog_itr.id;
+
+      GLint no_as;
+      GL_CHECK(::glGetProgramiv( prog_id, GL_ATTACHED_SHADERS, &no_as ));
+
+      std::vector<GLuint> shader_ids(no_as);
+      GL_CHECK(::glGetAttachedShaders( prog_id, no_as, 0x0, &shader_ids[0] ) );
+
+
+      bool program_has_shader = false;
+      for( auto prog_shader_id : shader_ids ) if(prog_shader_id == shader_id) program_has_shader = true;
+
+      // Try to link program if program has shader
+      if(program_has_shader) {
+
+        // Link program
+        GL_CHECK(::glLinkProgram( prog_id ));
+
+        // get link status
+        int link_ok;
+        GL_CHECK(::glGetProgramiv( prog_id, GL_LINK_STATUS, &link_ok ));
+
+        if(link_ok != GL_TRUE) {
+
+          qDebug() << "Linking failed!!!!";
+
+
+          int len = 0;
+          int written = 0;
+          char *log;
+
+          GL_CHECK(::glGetProgramiv( prog_id, GL_INFO_LOG_LENGTH, &len ));
+
+          if( len > 0 ) {
+
+            len = len+1;
+            log = new char[len];
+
+            GL_CHECK(::glGetProgramInfoLog( prog_id, len, &written, log ));
+
+            qDebug() << "Linker log: " << log;
+
+            delete log;
+          }
+
+
+
+          return false;
+        }
+      }
+    }
+  }
+
+  return true;
 }
 
 QVariant
@@ -81,7 +196,8 @@ GMOpenGLProxyModel::getTextureProperty(const QModelIndex& index, const QString& 
   return QVariant();
 }
 
-QVariant GMOpenGLProxyModel::getShaderProperty(const QModelIndex& index, const QString& name) const {
+QVariant
+GMOpenGLProxyModel::getShaderProperty(const QModelIndex& index, const QString& name) const {
 
   auto itr = getGLObjetcInfoItrAt( GMlib::GL::Shader::getData(), index.row());
   if(name=="source") {
@@ -89,17 +205,16 @@ QVariant GMOpenGLProxyModel::getShaderProperty(const QModelIndex& index, const Q
     const GLuint id = itr->id;
     std::vector<char> buff;
 
-    _glsurface->makeCurrent(); {
+    GLCSWMakeCurrent context(_glsurface);
+    context.makeCurrent();
 
-      int length;
-      GL_CHECK(::glGetShaderiv( id, GL_SHADER_SOURCE_LENGTH, &length ));
-      length++;
+    int length;
+    GL_CHECK(::glGetShaderiv( id, GL_SHADER_SOURCE_LENGTH, &length ));
+    length++;
 
-      int read;
-      buff.resize(length);
-      GL_CHECK(::glGetShaderSource( id, length, &read, buff.data() ));
-
-    } _glsurface->doneCurrent();
+    int read;
+    buff.resize(length);
+    GL_CHECK(::glGetShaderSource( id, length, &read, buff.data() ));
 
     return std::string( buff.data() ).c_str();
   }
@@ -107,7 +222,8 @@ QVariant GMOpenGLProxyModel::getShaderProperty(const QModelIndex& index, const Q
   return QVariant();
 }
 
-QVariant GMOpenGLProxyModel::getProgramProperty(const QModelIndex& index, const QString& name) const {
+QVariant
+GMOpenGLProxyModel::getProgramProperty(const QModelIndex& index, const QString& name) const {
 
   auto itr = getGLObjetcInfoItrAt( GMlib::GL::Program::getData(), index.row());
 //  if(name=="source") {

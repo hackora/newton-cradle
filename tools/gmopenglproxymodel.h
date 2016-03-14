@@ -54,7 +54,7 @@ public:
   Q_INVOKABLE int         getGLObjectType( const QModelIndex& index ) const;
 
   Q_INVOKABLE QVariant    getProperty(const QModelIndex& index, const QString& name ) const;
-  Q_INVOKABLE void        setProperty(const QModelIndex& index, const QString& name, QVariant );
+  Q_INVOKABLE bool        setProperty(const QModelIndex& index, const QString& name, const QVariant& data);
 
 
 
@@ -111,6 +111,8 @@ private:
   QVariant                getShaderProperty(const QModelIndex& index, const QString& name ) const;
   QVariant                getProgramProperty(const QModelIndex& index, const QString& name ) const;
   QVariant                getTextureProperty(const QModelIndex& index, const QString& name ) const;
+
+  bool                    setShaderProperty(const QModelIndex& index, const QString& name, const QVariant& data );
 
   template <typename T>
   auto constexpr getGLObjetcInfoItrAt( const T& objinfo_list, int at ) -> decltype(objinfo_list.begin()) const {

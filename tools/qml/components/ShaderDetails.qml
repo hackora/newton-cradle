@@ -43,7 +43,13 @@ Item {
           height: 20
 
           Item { Layout.fillWidth: true}
-          Button{ text: "Build"}
+          Button{
+            text: "Build";
+            onClicked: {
+              var status = root.model.setProperty(root.index, "source", source.text)
+              console.debug( "Compile shader code status: " + status )
+            }
+          }
           Button{ text: "+"; implicitWidth: height; onClicked: source.font.pointSize = source.font.pointSize+1}
           Button{ text: "-"; implicitWidth: height; onClicked: source.font.pointSize = source.font.pointSize-1}
           Item { width: 5 }
