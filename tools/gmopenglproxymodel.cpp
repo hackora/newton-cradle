@@ -16,7 +16,10 @@
 
 
 GMOpenGLProxyModel::GMOpenGLProxyModel(std::shared_ptr<GLContextSurfaceWrapper> glsurface)
-  : _glsurface{glsurface} {}
+  : _glsurface{glsurface}
+{
+  Q_ASSERT(glsurface);
+}
 
 int
 GMOpenGLProxyModel::getGLObjectType(const QModelIndex& index) const {

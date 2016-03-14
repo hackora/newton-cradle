@@ -72,7 +72,7 @@ set( HDRS
   application/window.h
   application/utils.h
 
-  tools/scenemodel.h
+  tools/sceneproxymodel.h
   tools/gmopenglproxymodel.h
   tools/syntaxhighlighter.h
   tools/glslsyntaxhighlighter.h
@@ -102,7 +102,7 @@ set( SRCS
   application/window.cpp
   application/main.cpp
 
-  tools/scenemodel.cpp
+  tools/sceneproxymodel.cpp
   tools/gmopenglproxymodel.cpp
   tools/syntaxhighlighter.cpp
   tools/glslsyntaxhighlighter.cpp
@@ -128,7 +128,7 @@ QT5_WRAP_CPP( HDRS_MOC
   application/guiapplication.h
   application/window.h
 
-  tools/scenemodel.h
+  tools/sceneproxymodel.h
   tools/gmopenglproxymodel.h
   tools/syntaxhighlighter.h
   tools/glslsyntaxhighlighter.h

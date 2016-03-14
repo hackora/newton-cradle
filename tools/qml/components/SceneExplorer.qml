@@ -5,76 +5,127 @@ import QtQuick.Layouts 1.1
 
 import "qrc:/qml/components"
 
+import MyCppComponents 1.0
+
 Rectangle {
   id: root
 
-  opacity: 0.7
-  border.color: "black"
-  border.width: 5
-  radius: 10
+  Component {
+    id: template
 
-  RowLayout {
+    Rectangle {
+
+      color: "blue"
+    }
+  }
+
+  SplitView {
+
     anchors.fill: parent
-    anchors.margins: 10
 
     SceneView {
       id: scene_view
       selectionMode: SelectionMode.NoSelection
 
       Layout.fillHeight: true
-
       Layout.fillWidth: true
-//      implicitWidth: Math.min( parent.width / 3, 300 )
-
-
 
       model: scene_model
 
-//      onClicked: {
-//        console.debug("current index changed: " +index)
-//        object_view.currentIndex = index.parent
-//      }
-
+      onCurrentIndexChanged: details.displayIndexData(currentIndex)
     }
 
-//    SceneObjectView {
-//      id: sceneobject_view
-//      Layout.fillHeight: true
-//      Layout.fillWidth: true
-
-//      model: scene_model
-//      rootIndex: scene_view.currentIndex
-
-//    }
-
-//    ColumnLayout {
-//      Layout.fillWidth: true
-//      Layout.fillHeight: true
-
-//      Repeater {
-//        id: rep
-//        model: DelegateModel {
-//          model: scene_model
-//          rootIndex: scene_view.currentIndex
-
-//          Rectangle{
-
-//            Layout.fillWidth: true
-//            implicitHeight: 30
-
-//            color: "yellow"
+    TabView {
+      id: details
 
 
+      height: width
+      Layout.minimumHeight: width
+      Layout.fillWidth: true
 
-//          }
+      property var model : scene_model
 
-//          onRootIndexChanged: console.debug("rootIndexChanged (items: " + count + "); " + rootIndex + ", repeater count: " + rep.count)
-////          onRootIndexChanged: console.debug( "Root index: " + rootIndex + " has a count of:" + count )
-//        }
-//      }
+      function displayIndexData(index) {
 
-//      Item { Layout.fillHeight: true }
-//    }
+        console.debug( "-----------------------------------------------------")
+        console.debug( "Display Index Data" )
+        console.debug( "Model: " + model )
+        console.debug( "DisplayIndexData: " + index )
+
+        var i;
+        var prev_tab_index = currentIndex
+
+        // Remove all tabs down to the scene tab
+        for( i = count-1; i >= 1; --i ) {
+          removeTab(i)
+        }
+
+        // Add one tab for each <known> module
+        var modules = model.getPropertyModules(index);
+        console.debug("Modules: " + modules )
+        for( i = 0; i < modules.length; ++i ) {
+          console.debug("  : " + modules[i])
+
+          var module = modules[i]
+          if(module === SceneProxyModel.SceneObject)      setupSceneObjectTab(addTab("SO"),index)
+          else if(module === SceneProxyModel.Camera)      addTab("C",         template)
+          else if(module === SceneProxyModel.PSurf )      addTab("PSurf",     template)
+          else if(module === SceneProxyModel.PERBSSurf )  addTab("PERBSSurf", template)
+          else if(module === SceneProxyModel.PTorus )     addTab("PTorus",    template)
+          else                                            addTab("X",         template)
+        }
+
+        if( prev_tab_index < count ) currentIndex = prev_tab_index
+        else                         currentIndex = 1
+
+
+
+      }
+
+
+      Tab {
+        title: "Scene"
+
+        ColumnLayout {
+
+          GridLayout {
+            Layout.fillWidth: true
+            columns: 2
+
+            Text{ text: "Clear color" }     Text{ text: "#color" }
+            Text{ text: "Running"     }     Button{ text: "$status" }
+          }
+          Item{
+            Layout.fillHeight: true
+          }
+        }
+      }
+    }
+
   }
 
+  function setupSceneObjectTab(tab,index) {
+
+    tab.setSource("qrc:/qml/components/SceneObjectDetailsTab.qml", {"model" : scene_model, "index": index} )
+  }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -3,6 +3,7 @@
 #include "rcpairrenderer.h"
 #include "texturerenderer.h"
 #include "../tools/gmopenglproxymodel.h"
+#include "../tools/sceneproxymodel.h"
 #include "../tools/glslsyntaxhighlighter.h"
 
 // gmlib
@@ -43,11 +44,19 @@ int main(int argc, char *argv[]) try {
   else
     qDebug() << QString( "GMlib version: %1" ).arg( GM_VERSION_STR ).toStdString().c_str();
 
+
+
+  // Register meta types
+
+
   // Register modules
   qmlRegisterType<RCPairRenderer>(        "MyCppComponents", 1, 0, "RCPairRenderer" );
   qmlRegisterType<TextureRenderer>(       "MyCppComponents", 1, 0, "TextureRenderer" );
-  qmlRegisterType<GMOpenGLProxyModel>(    "MyCppComponents", 1, 0, "GMOpenGLProxyModel" );
   qmlRegisterType<GLSLSyntaxHighlighter>( "MyCppComponents", 1, 0, "GLSLSyntaxHighlighter" );
+
+  // Register proxy models as modules to expose enumerations (introduce some sense of conformity)
+  qmlRegisterType<GMOpenGLProxyModel>(    "MyCppComponents", 1, 0, "GMOpenGLProxyModel" );
+  qmlRegisterType<SceneProxyModel>(       "MyCppComponents", 1, 0, "SceneProxyModel" );
 
 
   // Create the application object

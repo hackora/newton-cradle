@@ -10,7 +10,7 @@
 #include "hidmanager/defaulthidmanager.h"
 
 // scenemodel
-#include "tools/scenemodel.h"
+#include "tools/sceneproxymodel.h"
 
 // gmlib
 #include <gmOpenglModule>
@@ -81,6 +81,7 @@ void Scenario::initializeScenario() {
 
   // Surface
   auto surface = new TestTorus;
+  surface->setColor(GMlib::GMcolor::GreenYellow);
   surface->toggleDefaultVisualizer();
   surface->insertVisualizer(surface_visualizer);
   surface->replot(20,20,1,1);

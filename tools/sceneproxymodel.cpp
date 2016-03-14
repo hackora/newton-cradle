@@ -1,23 +1,27 @@
-#include "scenemodel.h"
+#include "sceneproxymodel.h"
 
 #include "../application/gmlibwrapper.h"
 
 // gmlib
 #include <gmSceneModule>
+#include <gmParametricsModule>
 
 // qt
 #include <QDebug>
+#include <QColor>
 
 
 
 
 
 
-SceneModel::SceneModel(std::shared_ptr<GMlibWrapper> gmlib)
+SceneProxyModel::SceneProxyModel(std::shared_ptr<GMlibWrapper> gmlib)
   : _gmlib{gmlib}
-{}
+{
+  Q_ASSERT(gmlib);
+}
 
-QModelIndex SceneModel::indexFromSceneObject(GMlib::SceneObject* so_to_find ) {
+QModelIndex SceneProxyModel::indexFromSceneObject(GMlib::SceneObject* so_to_find ) {
 
   for( int row = 0; row < scene()->getSize(); ++row ) {
 
@@ -32,8 +36,89 @@ QModelIndex SceneModel::indexFromSceneObject(GMlib::SceneObject* so_to_find ) {
 
 }
 
+QVariantList
+SceneProxyModel::getPropertyModules(const QModelIndex& index) const {
+
+  if(!index.isValid()) return QVariantList();
+
+  GMlib::SceneObject* so = static_cast<GMlib::SceneObject*>(index.internalPointer());
+
+  QVariantList modules;
+  modules << PropertyModules::SceneObject;
+
+  if( dynamic_cast<GMlib::Camera*>(so) )                      modules << PropertyModules::Camera;
+
+  if( dynamic_cast<GMlib::PSurf<float,3>*>(so) ) {            modules << PropertyModules::PSurf;
+    if( dynamic_cast<GMlib::PTorus<float>*>(so) )             modules << PropertyModules::PTorus;
+    else if( dynamic_cast<GMlib::PERBSSurf<float>*>(so) )     modules << PropertyModules::PERBSSurf;
+  }
+
+  return modules;
+}
+
+QVariant
+SceneProxyModel::getProperty(const QModelIndex& index, int module, const QString& name) const {
+
+  if(!index.isValid()) return QVariant();
+
+  const auto obj = static_cast<GMlib::SceneObject*>(index.internalPointer());
+
+  switch(module) {
+    case PropertyModules::SceneObject: return getSceneObjectProperty(*obj,name);
+  }
+
+  return QVariant();
+}
+
+QVariant
+SceneProxyModel::getSceneObjectProperty(const GMlib::SceneObject& sceneobject, const QString& name) const {
+
+  if(     name == "identity")     return sceneobject.getIdentity().c_str();
+  else if(name == "name")         return sceneobject.getName();
+  else if(name == "virtual_name") return sceneobject.getVirtualName();
+  else if(name == "color") {
+    GMlib::Color c = sceneobject.getColor();
+
+    QColor color;
+    color.setRgbF(c.getRedC(),c.getGreenC(),c.getBlueC(),c.getAlphaC());
+    return color;
+  }
+
+
+  return QVariant();
+}
+
+bool
+SceneProxyModel::setProperty(const QModelIndex& index, int module, const QString& name, const QVariant& value) {
+
+  if(!index.isValid()) return false;
+  auto obj = static_cast<GMlib::SceneObject*>(index.internalPointer());
+
+  switch(module) {
+    case PropertyModules::SceneObject: return setSceneObjectProperty(*obj,name,value);
+  }
+
+  return false;
+}
+
+bool
+SceneProxyModel::setSceneObjectProperty(GMlib::SceneObject& sceneobject, const QString& name, const QVariant& value ) {
+
+  if(name == "color") {
+    QColor c = value.value<QColor>();
+
+    GMlib::Color color(c.redF(),c.greenF(),c.blueF(),c.alphaF());
+    sceneobject.setColor(color);
+
+    return true;
+  }
+
+
+  return false;
+}
+
 QModelIndex
-SceneModel::index(int row, int column, const QModelIndex& parent) const {
+SceneProxyModel::index(int row, int column, const QModelIndex& parent) const {
 
   // No index evaluates to invalid index
   if( !hasIndex(row, column, parent) )
@@ -52,7 +137,7 @@ SceneModel::index(int row, int column, const QModelIndex& parent) const {
 }
 
 QModelIndex
-SceneModel::parent(const QModelIndex& index) const {
+SceneProxyModel::parent(const QModelIndex& index) const {
 
   // If invalid, return empty QModelIndex (which evaluates to top-level)
   if(!index.isValid())  return QModelIndex();
@@ -79,7 +164,7 @@ SceneModel::parent(const QModelIndex& index) const {
 }
 
 int
-SceneModel::rowCount(const QModelIndex& parent) const {
+SceneProxyModel::rowCount(const QModelIndex& parent) const {
 
   // Only first column can have children (one-dimensional tree)
   if( parent.column() > 0 ) return 0;
@@ -92,13 +177,13 @@ SceneModel::rowCount(const QModelIndex& parent) const {
 }
 
 int
-SceneModel::columnCount(const QModelIndex& parent) const {
+SceneProxyModel::columnCount(const QModelIndex& parent) const {
 
   return 1;
 }
 
 QVariant
-SceneModel::data(const QModelIndex& index, int role) const {
+SceneProxyModel::data(const QModelIndex& index, int role) const {
 
   if( !index.isValid() )         return QVariant("INVALID");
 
@@ -115,7 +200,7 @@ SceneModel::data(const QModelIndex& index, int role) const {
 }
 
 Qt::ItemFlags
-SceneModel::flags(const QModelIndex& index) const {
+SceneProxyModel::flags(const QModelIndex& index) const {
 
 //  if(!index.isValid()) return Qt::ItemIsEditable;
   if(!index.isValid()) return Qt::NoItemFlags;
@@ -124,7 +209,7 @@ SceneModel::flags(const QModelIndex& index) const {
 }
 
 QHash<int, QByteArray>
-SceneModel::roleNames() const {
+SceneProxyModel::roleNames() const {
 
   QHash<int, QByteArray> role_names;
   role_names[int(UserRoles::Identity)]      = "so_identity";
@@ -136,7 +221,7 @@ SceneModel::roleNames() const {
 }
 
 bool
-SceneModel::setData(const QModelIndex& index, const QVariant& value, int role) {
+SceneProxyModel::setData(const QModelIndex& index, const QVariant& value, int role) {
 
   if(!index.isValid() and role == Qt::EditRole) return false;
 
@@ -147,7 +232,7 @@ SceneModel::setData(const QModelIndex& index, const QVariant& value, int role) {
 }
 
 void
-SceneModel::stupidForceModelUpdate() {
+SceneProxyModel::stupidForceModelUpdate() {
 
   beginResetModel(); {
     // This is what happens
@@ -156,13 +241,13 @@ SceneModel::stupidForceModelUpdate() {
 }
 
 const std::shared_ptr<GMlib::Scene>&
-SceneModel::scene() const {
+SceneProxyModel::scene() const {
 
   return _gmlib->scene();
 }
 
 QModelIndex
-SceneModel::findQmiFromSo(const GMlib::Array<GMlib::SceneObject*>& children, GMlib::SceneObject* obj_to_find) const {
+SceneProxyModel::findQmiFromSo(const GMlib::Array<GMlib::SceneObject*>& children, GMlib::SceneObject* obj_to_find) const {
 
   for( int row = 0; row < children.size(); ++row ) {
 
