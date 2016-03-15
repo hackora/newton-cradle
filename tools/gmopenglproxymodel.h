@@ -67,7 +67,7 @@ public:
 
   QHash<int,QByteArray>   roleNames() const override;
 
-  enum UserRoles : int {
+  enum class UserRoles : int {
     Id = Qt::UserRole + 1,
     Name,
     DisplayName,
@@ -75,7 +75,7 @@ public:
   };
   Q_ENUM (UserRoles)
 
-  enum GLObjectType : int {
+  enum class GLObjectType : int {
     Invalid = 0,
     Shader,
     Program,

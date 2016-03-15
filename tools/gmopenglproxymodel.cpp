@@ -26,13 +26,13 @@ GMOpenGLProxyModel::getGLObjectType(const QModelIndex& index) const {
 
   if(!index.isValid()) return -1;
 
-  if(     index.internalPointer() == &_shader)    return  GLObjectType::Shader;
-  else if(index.internalPointer() == &_program)   return  GLObjectType::Program;
-  else if(index.internalPointer() == &_bo)        return  GLObjectType::Buffer;
-  else if(index.internalPointer() == &_fbo)       return  GLObjectType::Framebuffer;
-  else if(index.internalPointer() == &_rbo)       return  GLObjectType::Renderbuffer;
-  else if(index.internalPointer() == &_texture)   return  GLObjectType::Texture;
-  else                                            return  GLObjectType::Invalid;
+  if(     index.internalPointer() == &_shader)    return  int(GLObjectType::Shader);
+  else if(index.internalPointer() == &_program)   return  int(GLObjectType::Program);
+  else if(index.internalPointer() == &_bo)        return  int(GLObjectType::Buffer);
+  else if(index.internalPointer() == &_fbo)       return  int(GLObjectType::Framebuffer);
+  else if(index.internalPointer() == &_rbo)       return  int(GLObjectType::Renderbuffer);
+  else if(index.internalPointer() == &_texture)   return  int(GLObjectType::Texture);
+  else                                            return  int(GLObjectType::Invalid);
 }
 
 QVariant
