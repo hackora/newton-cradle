@@ -29,7 +29,7 @@ void Scenario::initializeScenario() {
   GMlib::PointLight *light = new GMlib::PointLight(  GMlib::GMcolor::White, GMlib::GMcolor::White,
                                                      GMlib::GMcolor::White, init_light_pos );
   light->setAttenuation(0.8, 0.002, 0.0008);
-  scene()->insertLight( light, false );
+  scene()->insertLight( light, true );
 
   // Insert Sun
   scene()->insertSun();

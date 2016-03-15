@@ -64,8 +64,9 @@ SceneProxyModel::getPropertyModules(const QModelIndex& index) const {
   modules << int(PropertyModules::SceneObject);
 
   if( dynamic_cast<GMlib::Camera*>(so) )                      modules << int(PropertyModules::Camera);
+  else if(dynamic_cast<GMlib::PointLightG*>(so) )             modules << int(PropertyModules::PointLight);
 
-  if( dynamic_cast<GMlib::PSurf<float,3>*>(so) ) {            modules << int(PropertyModules::PSurf);
+  else if( dynamic_cast<GMlib::PSurf<float,3>*>(so) ) {       modules << int(PropertyModules::PSurf);
     if( dynamic_cast<GMlib::PTorus<float>*>(so) )             modules << int(PropertyModules::PTorus);
     else if( dynamic_cast<GMlib::PERBSSurf<float>*>(so) )     modules << int(PropertyModules::PERBSSurf);
   }
@@ -96,16 +97,13 @@ SceneProxyModel::getSceneObjectProperty(const GMlib::SceneObject& sceneobject, c
   if(     name == "identity")     return sceneobject.getIdentity().c_str();
   else if(name == "name")         return sceneobject.getName();
   else if(name == "virtual_name") return sceneobject.getVirtualName();
-  else if(name == "color") {
-    GMlib::Color c = sceneobject.getColor();
-
-    QColor color;
-    color.setRgbF(c.getRedC(),c.getGreenC(),c.getBlueC(),c.getAlphaC());
-    return color;
-  }
-
+  else if(name == "color")        return toQColor(sceneobject.getColor());
 
   return QVariant();
+}
+
+QVariant SceneProxyModel::getPointLightProperty(const GMlib::PointLightG& pointlight, const QString& name) const {
+
 }
 
 bool
@@ -125,14 +123,10 @@ bool
 SceneProxyModel::setSceneObjectProperty(GMlib::SceneObject& sceneobject, const QString& name, const QVariant& value ) {
 
   if(name == "color") {
-    QColor c = value.value<QColor>();
 
-    GMlib::Color color(c.redF(),c.greenF(),c.blueF(),c.alphaF());
-    sceneobject.setColor(color);
-
+    sceneobject.setColor( toGMlibColor(value.value<QColor>()) );
     return true;
   }
-
 
   return false;
 }
@@ -304,5 +298,20 @@ SceneProxyModel::setCustomProperty(const GMlib::SceneObject* sceneobject, int mo
   Q_UNUSED(value)
 
   return false;
+}
+
+GMlib::Color
+SceneProxyModel::toGMlibColor(const QColor& c) {
+
+    GMlib::Color color(c.redF(),c.greenF(),c.blueF(),c.alphaF());
+    return color;
+}
+
+QColor
+SceneProxyModel::toQColor(const GMlib::Color& c) {
+
+    QColor color;
+    color.setRgbF(c.getRedC(),c.getGreenC(),c.getBlueC(),c.getAlphaC());
+    return color;
 }
 

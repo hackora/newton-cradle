@@ -10,52 +10,38 @@ Item {
   property var model
   property var index
 
-  ScrollView {
+  Item {
+    id: content
     anchors.fill: parent
 
-    ColumnLayout {
+    ScrollView {
+      anchors.fill: parent
+      horizontalScrollBarPolicy: Qt.ScrollBarAlwaysOff
 
-      GroupBox {
-        Layout.fillWidth: true
-        title: "Info"
+      ColumnLayout {
 
-        GridLayout {
-          anchors.fill: parent
-          columns: 2
+        GroupBox {
+          title: "Info"
+          implicitWidth: content.width
 
-          Text{ text: "Identity" }      Text{ id: txt_identity }
-          Text{ text: "Name" }          Text{ id: txt_name }
-          Text{ text: "Virtual Name" }  Text{ id: txt_vname }
+          GridLayout {
+            anchors.fill: parent
+            columns: 2
+
+            Text{ text: "Identity" }      Text{ id: txt_identity }
+            Text{ text: "Name" }          Text{ id: txt_name }
+            Text{ text: "Virtual Name" }  Text{ id: txt_vname }
+          }
         }
-      }
 
-      GroupBox {
-        Layout.fillWidth: true
-        title: "Color"
+        GroupBox {
+          title: "Color"
+          implicitWidth: content.width
 
-        ColorPicker{
-          id: color_picker
-          onColorChanged: model.setProperty(index,SceneProxyModel.SceneObject,"color",color)
-        }
-      }
-
-      GroupBox {
-        Layout.fillWidth: true
-        title: "Color"
-
-        ColorPicker{
-          id: color_picker2
-          onColorChanged: model.setProperty(index,SceneProxyModel.SceneObject,"color",color)
-        }
-      }
-
-      GroupBox {
-        Layout.fillWidth: true
-        title: "Color"
-
-        ColorPicker{
-          id: color_picker3
-          onColorChanged: model.setProperty(index,SceneProxyModel.SceneObject,"color",color)
+          ColorPicker{
+            id: color_picker
+            onColorChanged: model.setProperty(index,SceneProxyModel.SceneObject,"color",color)
+          }
         }
       }
     }

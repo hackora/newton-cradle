@@ -5,8 +5,6 @@ import QtQuick.Layouts 1.1
 
 Rectangle {
 
-  color: "blue"
-
   TabView {
     anchors.fill: parent
 
@@ -20,7 +18,11 @@ Rectangle {
           id: rcpairs
           Layout.fillWidth: true
 
-          Component.onCompleted: model = gmlibwrapper.getRCPairNamesList();
+          Component.onCompleted: {
+
+            model = gmlibwrapper.getRCPairNamesList();
+            clear_color.color = gmlibwrapper.getRCPairProperty(currentText,"clear_color")
+          }
 
           onCurrentIndexChanged: {
 
@@ -28,7 +30,6 @@ Rectangle {
             if(!currentText.length) return;
 
             clear_color.color = gmlibwrapper.getRCPairProperty(currentText,"clear_color")
-
           }
         }
 
@@ -45,14 +46,6 @@ Rectangle {
         Item { Layout.fillHeight: true }
       }
     }
-
-  }
-
-  Component.onCompleted: {
-
-    var rcpairs = gmlibwrapper.getRCPairNamesList();
-    rc_pair_list.model = rcpairs
-
 
   }
 }

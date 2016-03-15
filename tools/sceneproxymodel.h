@@ -15,6 +15,8 @@ class GMlibWrapper;
 namespace GMlib {
   class Scene;
   class SceneObject;
+  class PointLightG;
+  class Color;
 }
 #include <core/gmarray>
 
@@ -42,6 +44,7 @@ public:
 
   Q_INVOKABLE QVariant                getProperty( const QModelIndex& index, int module, const QString& name ) const;
   QVariant                            getSceneObjectProperty( const GMlib::SceneObject& sceneobject, const QString& name ) const;
+  QVariant                            getPointLightProperty( const GMlib::PointLightG& pointlight, const QString& name ) const;
 
 
   Q_INVOKABLE bool                    setProperty( const QModelIndex& index, int module, const QString& name, const QVariant& value );
@@ -66,7 +69,10 @@ public:
 
   enum class PropertyModules : int {
     SceneObject   = 0,
+
     Camera,
+    PointLight,
+
 
     PSurf,
     PERBSSurf,
@@ -104,6 +110,11 @@ private:
   virtual QVariantList                        getCustomPropertyModules( const GMlib::SceneObject* sceneobject ) const;
   virtual QVariant                            getCustomProperty( const GMlib::SceneObject* sceneobject, int module, const QString& name ) const;
   virtual bool                                setCustomProperty( const GMlib::SceneObject* sceneobject, int module, const QString& name, const QVariant& value );
+
+
+public:
+  static GMlib::Color                         toGMlibColor( const QColor& color );
+  static QColor                               toQColor( const GMlib::Color& color );
 };
 
 
