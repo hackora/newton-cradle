@@ -5,6 +5,7 @@
 #include "../tools/gmopenglproxymodel.h"
 #include "../tools/sceneproxymodel.h"
 #include "../tools/glslsyntaxhighlighter.h"
+#include "../mysceneproxymodel.h"
 
 // gmlib
 #include <core/gmglobal>
@@ -57,6 +58,7 @@ int main(int argc, char *argv[]) try {
   // Register proxy models as modules to expose enumerations (introduce some sense of conformity)
   qmlRegisterType<GMOpenGLProxyModel>(    "MyCppComponents", 1, 0, "GMOpenGLProxyModel" );
   qmlRegisterType<SceneProxyModel>(       "MyCppComponents", 1, 0, "SceneProxyModel" );
+  qmlRegisterType<MySceneProxyModel>(     "MyCppComponents", 1, 0, "MySceneProxyModel" );
 
 
   // Create the application object

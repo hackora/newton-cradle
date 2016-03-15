@@ -10,7 +10,7 @@
 #include "../hidmanager/hidmanagertreemodel.h"
 
 // scenemodel
-#include "../tools/sceneproxymodel.h"
+#include "../mysceneproxymodel.h"
 #include "../tools/gmopenglproxymodel.h"
 
 // qt
@@ -86,11 +86,11 @@ GuiApplication::onSGInit() {
 
 
   // Create scene model
-  _scenemodel = std::make_shared<SceneProxyModel>( _gmlib );
+  _scenemodel = std::make_shared<MySceneProxyModel>( _gmlib );
   _window->rootContext()->setContextProperty( "scene_model", _scenemodel.get() );
 
-//  connect(_hidmanager.get(), &StandardHidManager::signAfterHidAction,   _scenemodel.get(), &SceneProxyModel::stupidForceModelUpdate);
-  connect(_hidmanager.get(), &StandardHidManager::signAfterHidAction,   _scenemodel.get(), &SceneProxyModel::revert);
+//  connect(_hidmanager.get(), &StandardHidManager::signAfterHidAction,   _scenemodel.get(), &MySceneProxyModel::stupidForceModelUpdate);
+  connect(_hidmanager.get(), &StandardHidManager::signAfterHidAction,   _scenemodel.get(), &MySceneProxyModel::revert);
 
 
   // GM OpenGL manager proxy model
@@ -145,7 +145,7 @@ std::shared_ptr<GMlib::Scene> GuiApplication::scene() {
   return _gmlib->scene();
 }
 
-std::shared_ptr<SceneProxyModel> GuiApplication::scenemodel() {
+std::shared_ptr<MySceneProxyModel> GuiApplication::scenemodel() {
 
   return _scenemodel;
 }

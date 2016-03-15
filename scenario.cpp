@@ -10,7 +10,7 @@
 #include "hidmanager/defaulthidmanager.h"
 
 // scenemodel
-#include "tools/sceneproxymodel.h"
+#include "mysceneproxymodel.h"
 
 // gmlib
 #include <gmOpenglModule>

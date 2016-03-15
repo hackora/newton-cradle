@@ -79,6 +79,7 @@ set( HDRS
 
   testtorus.h
   scenario.h
+  mysceneproxymodel.h
   )
 
 set( SRCS
@@ -108,6 +109,7 @@ set( SRCS
   tools/glslsyntaxhighlighter.cpp
 
   scenario.cpp
+  mysceneproxymodel.cpp
   )
 
 #########
@@ -134,6 +136,7 @@ QT5_WRAP_CPP( HDRS_MOC
   tools/glslsyntaxhighlighter.h
 
   scenario.h
+  mysceneproxymodel.h
   )
 
 set( RCCS

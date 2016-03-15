@@ -16,6 +16,8 @@ Rectangle {
     Rectangle {
 
       color: "blue"
+
+      Text{ text: "N/A"; anchors.centerIn: parent; color: "red"; font.bold: true }
     }
   }
 
@@ -47,10 +49,10 @@ Rectangle {
 
       function displayIndexData(index) {
 
-        console.debug( "-----------------------------------------------------")
-        console.debug( "Display Index Data" )
-        console.debug( "Model: " + model )
-        console.debug( "DisplayIndexData: " + index )
+//        console.debug( "-----------------------------------------------------")
+//        console.debug( "Display Index Data" )
+//        console.debug( "Model: " + model )
+//        console.debug( "DisplayIndexData: " + index )
 
         var i;
         var prev_tab_index = currentIndex
@@ -62,17 +64,25 @@ Rectangle {
 
         // Add one tab for each <known> module
         var modules = model.getPropertyModules(index);
-        console.debug("Modules: " + modules )
+//        console.debug("Modules: " + modules )
         for( i = 0; i < modules.length; ++i ) {
-          console.debug("  : " + modules[i])
+//          console.debug("  : " + modules[i])
 
           var module = modules[i]
+
+          // GMlib modules
           if(module === SceneProxyModel.SceneObject)      setupSceneObjectTab(addTab("SO"),index)
           else if(module === SceneProxyModel.Camera)      addTab("C",         template)
           else if(module === SceneProxyModel.PSurf )      addTab("PSurf",     template)
           else if(module === SceneProxyModel.PERBSSurf )  addTab("PERBSSurf", template)
           else if(module === SceneProxyModel.PTorus )     addTab("PTorus",    template)
+
+          // My custom modules
+          else if(module === MySceneProxyModel.TestTorus) addTab("TestTorus", template)
+
+          // I have no Idea modules
           else                                            addTab("X",         template)
+
         }
 
         if( prev_tab_index < count ) currentIndex = prev_tab_index
@@ -92,7 +102,7 @@ Rectangle {
             Layout.fillWidth: true
             columns: 2
 
-            Text{ text: "Running"     }     Text{ text: "I don't care..." }
+            Text{ text: "Running: "     }     Text{ text: "Does it look like I care..." }
           }
 
           Item{

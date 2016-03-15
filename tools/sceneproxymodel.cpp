@@ -61,14 +61,17 @@ SceneProxyModel::getPropertyModules(const QModelIndex& index) const {
   GMlib::SceneObject* so = static_cast<GMlib::SceneObject*>(index.internalPointer());
 
   QVariantList modules;
-  modules << PropertyModules::SceneObject;
+  modules << int(PropertyModules::SceneObject);
 
-  if( dynamic_cast<GMlib::Camera*>(so) )                      modules << PropertyModules::Camera;
+  if( dynamic_cast<GMlib::Camera*>(so) )                      modules << int(PropertyModules::Camera);
 
-  if( dynamic_cast<GMlib::PSurf<float,3>*>(so) ) {            modules << PropertyModules::PSurf;
-    if( dynamic_cast<GMlib::PTorus<float>*>(so) )             modules << PropertyModules::PTorus;
-    else if( dynamic_cast<GMlib::PERBSSurf<float>*>(so) )     modules << PropertyModules::PERBSSurf;
+  if( dynamic_cast<GMlib::PSurf<float,3>*>(so) ) {            modules << int(PropertyModules::PSurf);
+    if( dynamic_cast<GMlib::PTorus<float>*>(so) )             modules << int(PropertyModules::PTorus);
+    else if( dynamic_cast<GMlib::PERBSSurf<float>*>(so) )     modules << int(PropertyModules::PERBSSurf);
   }
+
+
+  modules << getCustomPropertyModules(so);
 
   return modules;
 }
@@ -80,11 +83,11 @@ SceneProxyModel::getProperty(const QModelIndex& index, int module, const QString
 
   const auto obj = static_cast<GMlib::SceneObject*>(index.internalPointer());
 
-  switch(module) {
+  switch(PropertyModules(module)) {
     case PropertyModules::SceneObject: return getSceneObjectProperty(*obj,name);
   }
 
-  return QVariant();
+  return getCustomProperty(obj,module,name);
 }
 
 QVariant
@@ -111,11 +114,11 @@ SceneProxyModel::setProperty(const QModelIndex& index, int module, const QString
   if(!index.isValid()) return false;
   auto obj = static_cast<GMlib::SceneObject*>(index.internalPointer());
 
-  switch(module) {
+  switch(PropertyModules(module)) {
     case PropertyModules::SceneObject: return setSceneObjectProperty(*obj,name,value);
   }
 
-  return false;
+  return setCustomProperty(obj,module,name,value);
 }
 
 bool
@@ -275,5 +278,31 @@ SceneProxyModel::findQmiFromSo(const GMlib::Array<GMlib::SceneObject*>& children
   }
 
   return QModelIndex();
+}
+
+QVariantList
+SceneProxyModel::getCustomPropertyModules(const GMlib::SceneObject* sceneobject) const {
+  Q_UNUSED(sceneobject)
+
+  return QVariantList();
+}
+
+QVariant
+SceneProxyModel::getCustomProperty(const GMlib::SceneObject* sceneobject, int module, const QString& name) const {
+  Q_UNUSED(sceneobject)
+  Q_UNUSED(module)
+  Q_UNUSED(name)
+
+  return QVariant();
+}
+
+bool
+SceneProxyModel::setCustomProperty(const GMlib::SceneObject* sceneobject, int module, const QString& name, const QVariant& value) {
+  Q_UNUSED(sceneobject)
+  Q_UNUSED(module)
+  Q_UNUSED(name)
+  Q_UNUSED(value)
+
+  return false;
 }
 

@@ -24,12 +24,8 @@ Item {
   }
 
 
-
   Component.onCompleted: {
 
-    console.debug("SceneObjectDetailsTab")
-    console.debug("  model: " + model)
-    console.debug("  index: " + index)
     // do your stuff
     txt_identity.text  = model.getProperty(index,SceneProxyModel.SceneObject,"identity")
     txt_name.text      = model.getProperty(index,SceneProxyModel.SceneObject,"name")
