@@ -10,8 +10,15 @@ import MyCppComponents 1.0
 Rectangle {
   id: root
 
+  Item {
+    id: internal
+
+    readonly property var model : glmng_model
+  }
+
   SplitView {
     id: splitview
+
     anchors.fill: parent
     orientation: Qt.Vertical
 
@@ -22,23 +29,22 @@ Rectangle {
       Layout.fillHeight: true
       Layout.fillWidth: true
 
-      model: glmng_model
+      model: internal.model
 
-      onCurrentIndexChanged: {
-        details.displayIndexData(currentIndex)
-      }
+      onCurrentIndexChanged: details.displayIndexData(currentIndex)
     }
 
 
     Rectangle {
       id: details
-      height: width
+
+      height: 200
       Layout.minimumHeight: width
       Layout.fillWidth: true
 
       function displayIndexData(index) {
 
-        var obj_type = glmng_model.getGLObjectType(index)
+        var obj_type = internal.model.getGLObjectType(index)
         var enum_tex = GMOpenGLProxyModel.Texture;
         var obj_type_eq_enum_tex = obj_type === enum_tex;
 
@@ -59,14 +65,14 @@ Rectangle {
       ShaderDetails {
         id: shader_details
         anchors.fill: parent
-        model: glmng_model
+        model: internal.model
         visible: false
       }
 
       TextureDetails {
         id: texture_details
         anchors.fill: parent
-        model: glmng_model
+        model: internal.model
         visible: false
       }
 

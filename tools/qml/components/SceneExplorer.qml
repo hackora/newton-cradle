@@ -10,6 +10,12 @@ import MyCppComponents 1.0
 Rectangle {
   id: root
 
+  Item {
+    id: internal
+
+    readonly property var model : scene_model
+  }
+
   Component {
     id: template
 
@@ -22,8 +28,9 @@ Rectangle {
   }
 
   SplitView {
-
     anchors.fill: parent
+
+    orientation: Qt.Vertical
 
     SceneView {
       id: scene_view
@@ -32,7 +39,7 @@ Rectangle {
       Layout.fillHeight: true
       Layout.fillWidth: true
 
-      model: scene_model
+      model: internal.model
 
       onCurrentIndexChanged: details.displayIndexData(currentIndex)
     }
@@ -45,8 +52,6 @@ Rectangle {
       Layout.minimumHeight: width
       Layout.fillWidth: true
 
-      property var model : scene_model
-
       function displayIndexData(index) {
 
 //        console.debug( "-----------------------------------------------------")
@@ -58,12 +63,12 @@ Rectangle {
         var prev_tab_index = currentIndex
 
         // Remove all tabs down to the scene tab
-        for( i = count-1; i >= 1; --i ) {
+        for( i = count-1; i >= 0; --i ) {
           removeTab(i)
         }
 
         // Add one tab for each <known> module
-        var modules = model.getPropertyModules(index);
+        var modules = internal.model.getPropertyModules(index);
 //        console.debug("Modules: " + modules )
         for( i = 0; i < modules.length; ++i ) {
 //          console.debug("  : " + modules[i])
@@ -86,37 +91,28 @@ Rectangle {
         }
 
         if( prev_tab_index < count ) currentIndex = prev_tab_index
-        else                         currentIndex = 1
+        else                         currentIndex = 0
 
 
 
       }
 
 
-      Tab {
-        title: "Scene"
+//          Tab {
+//            title: "Scene"
 
-        ColumnLayout {
+//            Component.onCompleted: {
+//              setSource("qrc:/qml/components/SceneDetailsTab.qml", {"model" : scene_model} )
+//            }
 
-          GridLayout {
-            Layout.fillWidth: true
-            columns: 2
-
-            Text{ text: "Running: "     }     Text{ text: "Does it look like I care..." }
-          }
-
-          Item{
-            Layout.fillHeight: true
-          }
-        }
-      }
+//          }
     }
 
   }
 
   function setupSceneObjectTab(tab,index) {
 
-    tab.setSource("qrc:/qml/components/SceneObjectDetailsTab.qml", {"model" : scene_model, "index": index} )
+    tab.setSource("qrc:/qml/components/SceneObjectDetailsTab.qml", {"model" : internal.model, "index": index} )
   }
 }
 

@@ -10,49 +10,52 @@ import MyCppComponents 1.0
 Item {
   id: root
 
-  ListModel {
-    id: contactModel
-
-      ListElement {
-          name: "Bill Smith"
-          number: "555 3264"
-      }
-      ListElement {
-          name: "John Brown"
-          number: "555 8426"
-      }
-      ListElement {
-          name: "Sam Wise"
-          number: "555 0473"
-      }
-  }
-
   signal toggleHidBindView
 
-  onToggleHidBindView: hid_bind_view.toggle()
 
-  RowLayout {
+  SplitView {
     anchors.fill: parent
 
-    SceneExplorer {
-      id: scene_explorer
+    Rectangle {
+      id: tool_bar
 
+      width: 300
       Layout.fillHeight: true
-      width: 400
+      Layout.minimumWidth: 200
 
-      anchors.margins: 50
-      visible:false
 
-    }
+      TabView {
+        anchors.fill: parent
 
-    GLMngExplorer {
-      id: glmng_explorer
+        Tab {
+          title: "App"
 
-      Layout.fillHeight: true
-      width: 400
+          Component.onCompleted: {
+            setSource("qrc:/qml/components/ApplicationProperties.qml" )
+          }
+        }
 
-      anchors.margins: 50
-      visible:false
+        Tab {
+          title: "Scene"
+
+          Component.onCompleted: {
+            setSource("qrc:/qml/components/SceneProperties.qml" )
+          }
+        }
+
+        Tab {
+          title: "Explorer"
+
+          Component.onCompleted: setSource( "qrc:/qml/components/SceneExplorer.qml" )
+        }
+
+        Tab {
+          title: "OpenGL"
+          Component.onCompleted: setSource( "qrc:/qml/components/GLMngExplorer.qml" )
+        }
+
+        Component.onCompleted: currentIndex = 2
+      }
     }
 
     RCPairRenderer{
@@ -79,8 +82,8 @@ Item {
       }
 
       Button {
-        id: hid_bind_view_button
-        text: "?"
+        id: tools_button
+        text: "T"
         anchors.top: parent.top
         anchors.right: parent.right
         anchors.margins: 5
@@ -88,92 +91,40 @@ Item {
         width: height
         opacity: 0.7
 
-        onClicked: root.toggleState("hid_bind_view")
+        onClicked: tool_bar.visible = !tool_bar.visible
       }
 
       Button {
-        id: scene_explorer_button
-        text: "X"
-        anchors.top: parent.top
-        anchors.right: hid_bind_view_button.left
+        id: hid_bind_view_button
+        text: "?"
+        anchors.top: tools_button.bottom
+        anchors.right: parent.right
         anchors.margins: 5
 
         width: height
         opacity: 0.7
 
-        onClicked: root.toggleState("scene_explorer")
+        onClicked: hid_bind_view.visible = !hid_bind_view.visible
       }
 
-      Button {
-        text: "Y"
-        anchors.top: parent.top
-        anchors.right: scene_explorer_button.left
-        anchors.margins: 5
 
-        width: height
-        opacity: 0.7
-
-        onClicked: root.toggleState("glmng_explorer")
-      }
-
-      Item {
-        id: views
+      HidBindingView {
+        id: hid_bind_view
         anchors.fill: parent
+        anchors.margins: 50
+        visible:false
 
-        HidBindingView {
-          id: hid_bind_view
-          anchors.fill: parent
-          anchors.margins: 50
-          visible:false
-        }
+        signal toggleVisible
 
+        onToggleVisible: visible = !visible
       }
-
-
-  //    TextureViewer {
-
-  //      width:  256
-  //      height: 144
-
-  //      anchors.right:  parent.right
-  //      anchors.bottom: parent.bottom
-  //    }
-
     }
 
   }
 
-  function toggleState(state_to_toggle) {
-
-    if(state === state_to_toggle) state = ""
-    else state = state_to_toggle
-
+  Component.onCompleted: {
+    root.toggleHidBindView.connect( hid_bind_view.toggleVisible )
   }
-
-
-  states: [
-    State{
-      name: "hid_bind_view"
-      PropertyChanges {
-        target: hid_bind_view
-        visible: true
-      }
-    },
-    State{
-      name: "scene_explorer"
-      PropertyChanges {
-        target: scene_explorer
-        visible: true
-      }
-    },
-    State{
-      name: "glmng_explorer"
-      PropertyChanges {
-        target: glmng_explorer
-        visible: true
-      }
-    }
-  ]
 
 }
 

@@ -10,16 +10,54 @@ Item {
   property var model
   property var index
 
-  ColumnLayout {
+  ScrollView {
+    anchors.fill: parent
 
-    GridLayout {
-      Layout.fillWidth: true
-      columns: 2
+    ColumnLayout {
 
-      Text{ text: "Identity" }      Text{ id: txt_identity }
-      Text{ text: "Name" }          Text{ id: txt_name }
-      Text{ text: "Virtual Name" }  Text{ id: txt_vname }
-      Text{ text: "Color" }         ColorPicker{ id: color_picker; onColorChanged: model.setProperty(index,SceneProxyModel.SceneObject,"color",color) }
+      GroupBox {
+        Layout.fillWidth: true
+        title: "Info"
+
+        GridLayout {
+          anchors.fill: parent
+          columns: 2
+
+          Text{ text: "Identity" }      Text{ id: txt_identity }
+          Text{ text: "Name" }          Text{ id: txt_name }
+          Text{ text: "Virtual Name" }  Text{ id: txt_vname }
+        }
+      }
+
+      GroupBox {
+        Layout.fillWidth: true
+        title: "Color"
+
+        ColorPicker{
+          id: color_picker
+          onColorChanged: model.setProperty(index,SceneProxyModel.SceneObject,"color",color)
+        }
+      }
+
+      GroupBox {
+        Layout.fillWidth: true
+        title: "Color"
+
+        ColorPicker{
+          id: color_picker2
+          onColorChanged: model.setProperty(index,SceneProxyModel.SceneObject,"color",color)
+        }
+      }
+
+      GroupBox {
+        Layout.fillWidth: true
+        title: "Color"
+
+        ColorPicker{
+          id: color_picker3
+          onColorChanged: model.setProperty(index,SceneProxyModel.SceneObject,"color",color)
+        }
+      }
     }
   }
 

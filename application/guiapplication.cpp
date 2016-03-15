@@ -63,6 +63,7 @@ GuiApplication::onSGInit() {
   // Init GMlibWrapper
   _gmlib = std::make_shared<GMlibWrapper>(_glsurface);
   _gmlib->init();
+  _window->rootContext()->setContextProperty( "gmlibwrapper", _gmlib.get() );
   connect( _gmlib.get(),  &GMlibWrapper::signFrameReady,         _window.get(), &Window::update );
   connect( _window.get(), &Window::signRcPairViewportChanged,    _gmlib.get(),  &GMlibWrapper::changeRcPairViewport );
   connect( _window.get(), &Window::signRcPairActiveStateChanged, _gmlib.get(),  &GMlibWrapper::changeRcPairActiveState );

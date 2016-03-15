@@ -85,7 +85,6 @@ RowLayout {
     id: preview
     width: height
     height: gl.height
-    Layout.fillHeight: true
     color: root.color
 
     border { width: 1; color: "black" } radius: 2

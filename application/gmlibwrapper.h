@@ -77,6 +77,9 @@ public:
 
   std::shared_ptr<GMlib::DefaultSelectRenderer>     defaultSelectRenderer() const;
 
+  Q_INVOKABLE QVariantList                          getRCPairNamesList() const;
+  Q_INVOKABLE QVariant                              getRCPairProperty( const QString& name, const QString& property_name ) const;
+  Q_INVOKABLE bool                                  setRCPairProperty( const QString& name, const QString& property_name, const QVariant& value );
 
 
 public slots:
@@ -84,6 +87,7 @@ public slots:
   void                                              changeRcPairViewport( const QString& name, const QRectF& geometry);
 
   void                                              toggleSimulation();
+
 
 protected:
   void                                              timerEvent(QTimerEvent *e);
@@ -110,7 +114,6 @@ private:
 
 signals:
   void                                              signFrameReady();
-
 
 
   // "Singleton instance"

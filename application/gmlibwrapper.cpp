@@ -16,6 +16,7 @@
 #include <QRectF>
 #include <QMouseEvent>
 #include <QDebug>
+#include <QColor>
 
 // stl
 #include <stdexcept>
@@ -248,6 +249,45 @@ std::shared_ptr<GMlib::DefaultSelectRenderer>
 GMlibWrapper::defaultSelectRenderer() const {
 
   return _select_renderer;
+}
+
+QVariantList
+GMlibWrapper::getRCPairNamesList() const {
+
+  QVariantList names;
+  for( const auto& rcpair : _rc_pairs ) names << rcpair.first.c_str();
+  return names;
+}
+
+QVariant
+GMlibWrapper::getRCPairProperty(const QString& name, const QString& property_name) const {
+
+  if(!name.length()) return QVariant();
+
+  if(property_name == "clear_color") {
+
+    auto c = rcPair(name).renderer->getClearColor();
+    QColor color;
+    color.setRgbF(c.getRedC(),c.getGreenC(),c.getBlueC(),c.getAlphaC());
+    return color;
+  }
+
+  return QVariant();
+}
+
+bool
+GMlibWrapper::setRCPairProperty(const QString& name, const QString& property_name, const QVariant& value) {
+
+  if(!name.length()) return false;
+
+  if(property_name == "clear_color") {
+
+    auto c = value.value<QColor>();
+    GMlib::Color color(c.redF(),c.greenF(),c.blueF(),c.alphaF());
+    rcPair(name).renderer->setClearColor(color);
+  }
+
+  return false;
 }
 
 void
