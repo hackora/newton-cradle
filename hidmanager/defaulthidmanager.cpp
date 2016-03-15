@@ -473,7 +473,6 @@ Scene* DefaultHidManager::scene() const {
 
 SceneObject* DefaultHidManager::findSceneObject( const QString& view_name, const GMlib::Point<int,2>& pos  ) {
 
-
   return _gmlib->findSceneObject( view_name, pos );
 }
 

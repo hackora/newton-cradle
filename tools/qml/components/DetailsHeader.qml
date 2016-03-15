@@ -38,7 +38,10 @@ Item {
 
 
   onIndexChanged: {
-    txt.id            =  root.model.getProperty(root.index,"id")
+
+    if(root.index===undefined) return;
+
+    txt.id            = root.model.getProperty(root.index,"id")
     txt.name          = root.model.getProperty(root.index,"name")
     txt.count         = root.model.getProperty(root.index,"count")
     txt.is_persistent = root.model.getProperty(root.index,"persistent")
