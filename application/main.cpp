@@ -6,6 +6,7 @@
 #include "../tools/sceneproxymodel.h"
 #include "../tools/glslsyntaxhighlighter.h"
 #include "../mysceneproxymodel.h"
+#include "../tools/gmlibqmltypes.h"
 
 // gmlib
 #include <core/gmglobal>
@@ -48,7 +49,7 @@ int main(int argc, char *argv[]) try {
 
 
   // Register meta types
-
+//  registerGMlibQmlTypes();
 
   // Register modules
   qmlRegisterType<RCPairRenderer>(        "MyCppComponents", 1, 0, "RCPairRenderer" );

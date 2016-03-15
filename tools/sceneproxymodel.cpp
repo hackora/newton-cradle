@@ -1,6 +1,7 @@
 #include "sceneproxymodel.h"
 
 #include "../application/gmlibwrapper.h"
+#include "gmlibqmltypes.h"
 
 // gmlib
 #include <gmSceneModule>
@@ -97,7 +98,9 @@ SceneProxyModel::getSceneObjectProperty(const GMlib::SceneObject& sceneobject, c
   if(     name == "identity")     return sceneobject.getIdentity().c_str();
   else if(name == "name")         return sceneobject.getName();
   else if(name == "virtual_name") return sceneobject.getVirtualName();
-  else if(name == "color")        return toQColor(sceneobject.getColor());
+  else if(name == "lighted")      return sceneobject.isLighted();
+  else if(name == "color")        return QVariant::fromValue(Color_GM(sceneobject.getColor()));
+  else if(name == "material" )    return QVariant::fromValue(Material_GM(sceneobject.getMaterial()));
 
   return QVariant();
 }
@@ -125,6 +128,12 @@ SceneProxyModel::setSceneObjectProperty(GMlib::SceneObject& sceneobject, const Q
   if(name == "color") {
 
     sceneobject.setColor( toGMlibColor(value.value<QColor>()) );
+    return true;
+  }
+  else if( name == "material" ) {
+
+    auto material = value.value<Material_GM>();
+    sceneobject.setMaterial(material);
     return true;
   }
 
@@ -303,15 +312,15 @@ SceneProxyModel::setCustomProperty(const GMlib::SceneObject* sceneobject, int mo
 GMlib::Color
 SceneProxyModel::toGMlibColor(const QColor& c) {
 
-    GMlib::Color color(c.redF(),c.greenF(),c.blueF(),c.alphaF());
-    return color;
+  GMlib::Color color(c.redF(),c.greenF(),c.blueF(),c.alphaF());
+  return color;
 }
 
 QColor
 SceneProxyModel::toQColor(const GMlib::Color& c) {
 
-    QColor color;
-    color.setRgbF(c.getRedC(),c.getGreenC(),c.getBlueC(),c.getAlphaC());
-    return color;
+  QColor color;
+  color.setRgbF(c.getRedC(),c.getGreenC(),c.getBlueC(),c.getAlphaC());
+  return color;
 }
 
