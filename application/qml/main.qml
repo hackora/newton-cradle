@@ -14,14 +14,6 @@ Item {
   signal toggleHidBindView
 
 
-  Item {
-    id: button_template
-    visible: false
-
-
-  }
-
-
   SplitView {
     anchors.fill: parent
 
