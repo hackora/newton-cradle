@@ -2,8 +2,94 @@ import QtQuick 2.1
 import QtQuick.Layouts 1.0
 import QtQuick.Controls 1.0
 
-RowLayout {
+Item {
   id: root
+  implicitHeight: rect.implicitHeight
+  implicitWidth: rect.implicitWidth
+
+  property color color : "#FFFF0000"  // ARGB
+  property alias previewVisible : preview.visible
+  property bool  alphaVisible: true
+  property string title : ""
+
+
+  Rectangle {
+    id: rect
+    anchors.fill: parent
+    implicitWidth: cl.implicitWidth
+    implicitHeight: cl.implicitHeight
+
+    color: "red"
+
+    ColumnLayout {
+      id: cl
+      anchors.fill: parent
+
+      Item {
+        Layout.fillWidth: true
+        height: 20
+
+        RowLayout {
+          anchors.fill: parent
+          Text { id: title_text; anchors.fill: parent; text: root.title; font.bold: true }
+          Rectangle { id: simple_preview;  Layout.fillWidth: true; height: title_text.height; border { width: 1; color: "black" } radius: 2; color: root.color;}
+        }
+
+        MouseArea {
+          anchors.fill: parent
+          onClicked: root.state = root.state === "" ? "details" : ""
+        }
+      }
+
+      RowLayout {
+        id: rl
+        visible: false
+        Layout.fillWidth: true
+
+        GridLayout{
+          id: gl
+          columns: 3
+          flow: GridLayout.LeftToRight
+          Layout.fillWidth: true
+          Layout.fillHeight: true
+
+          Text{ id: r_text; text: "R" }
+          Slider { id: r_slider; minimumValue: 0; maximumValue: 1; stepSize: 0.01; value: 1; Layout.fillWidth: true }
+          Rectangle { id: r_preview; width: height*2; height: r_text.height; border { width: 1; color: "black" } radius: 2; color: "#F00" }
+
+          Text{ id: g_text; text: "G" }
+          Slider { id: g_slider; minimumValue: 0; maximumValue: 1; stepSize: 0.01; value: 1; Layout.fillWidth: true  }
+          Rectangle { id: g_preview; width: height*2; height: g_text.height; border { width: 1; color: "black" } radius: 2; color: "#0F0"  }
+
+          Text{ id: b_text; text: "B" }
+          Slider { id: b_slider; minimumValue: 0; maximumValue: 1; stepSize: 0.01; value: 1; Layout.fillWidth: true  }
+          Rectangle { id: b_preview; width: height*2; height: b_text.height; border { width: 1; color: "black" } radius: 2; color: "#00F"  }
+
+          Text{ id: a_text; visible: alphaVisible; text: "A" }
+          Slider { id: a_slider; visible: alphaVisible; minimumValue: 0; maximumValue: 1; stepSize: 0.01; value: 1; Layout.fillWidth: true  }
+          Rectangle { id: a_preview; visible: alphaVisible; width: height*2; height: a_text.height; border { width: 1; color: "black" } radius: 2; color: "#FFF"  }
+        }
+
+        Rectangle {
+          id: preview
+          implicitHeight: gl.height
+          implicitWidth: implicitHeight
+          color: root.color
+
+          border { width: 1; color: "black" } radius: 2
+        }
+      }
+    }
+  }
+
+
+  states: [
+    State {
+      name: "details"
+      PropertyChanges { target: simple_preview; visible: false }
+      PropertyChanges { target: rl; visible: true }
+    }
+  ]
 
   Item {
     id: priv
@@ -40,54 +126,6 @@ RowLayout {
       updatePreviews()
 
     }
-  }
-
-  property color color : "#FFFF0000"  // ARGB
-  property alias previewVisible : preview.visible
-  property bool  alphaVisible: true
-
-  signal setColor( color c )
-
-  onSetColor: {
-
-    root.color = c
-    priv.updatePreviews()
-  }
-
-
-
-  GridLayout {
-    id: gl
-    columns: 3
-    flow: GridLayout.LeftToRight
-
-    Text{ id: r_text; text: "R" }
-    Slider { id: r_slider; minimumValue: 0; maximumValue: 1; stepSize: 0.01; value: 1 }
-    Rectangle { id: r_preview; width: height*2; height: r_text.height; border { width: 1; color: "black" } radius: 2; color: "#F00" }
-
-
-    Text{ id: g_text; text: "G" }
-    Slider { id: g_slider; minimumValue: 0; maximumValue: 1; stepSize: 0.01; value: 1 }
-    Rectangle { id: g_preview; width: height*2; height: g_text.height; border { width: 1; color: "black" } radius: 2; color: "#0F0"  }
-
-
-    Text{ id: b_text; text: "B" }
-    Slider { id: b_slider; minimumValue: 0; maximumValue: 1; stepSize: 0.01; value: 1 }
-    Rectangle { id: b_preview; width: height*2; height: b_text.height; border { width: 1; color: "black" } radius: 2; color: "#00F"  }
-
-
-    Text{ id: a_text; visible: alphaVisible; text: "A" }
-    Slider { id: a_slider; visible: alphaVisible; minimumValue: 0; maximumValue: 1; stepSize: 0.01; value: 1 }
-    Rectangle { id: a_preview; visible: alphaVisible; width: height*2; height: a_text.height; border { width: 1; color: "black" } radius: 2; color: "#FFF"  }
-  }
-
-  Rectangle {
-    id: preview
-    width: height
-    height: gl.height
-    color: root.color
-
-    border { width: 1; color: "black" } radius: 2
   }
 
   Component.onCompleted: {
