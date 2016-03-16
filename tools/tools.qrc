@@ -12,6 +12,7 @@
         <file>qml/components/ColorPicker.qml</file>
         <file>qml/components/ApplicationProperties.qml</file>
         <file>qml/components/SceneProperties.qml</file>
+        <file>qml/components/MaterialPicker.qml</file>
     </qresource>
     <qresource prefix="/tools/gfx">
         <file alias="visible">gfx/eye.png</file>
