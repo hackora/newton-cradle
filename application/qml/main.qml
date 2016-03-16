@@ -1,6 +1,7 @@
 import QtQuick 2.2
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 1.4
+import QtQuick.Controls.Styles 1.4
 
 import "qrc:/qml/components"
 
@@ -13,11 +14,19 @@ Item {
   signal toggleHidBindView
 
 
+  Item {
+    id: button_template
+    visible: false
+
+
+  }
+
+
   SplitView {
     anchors.fill: parent
 
     Rectangle {
-      id: tool_bar
+      id: tools
 
       width: 300
       Layout.fillHeight: true
@@ -83,30 +92,65 @@ Item {
 
       Button {
         id: tools_button
-        text: "T"
         anchors.top: parent.top
         anchors.right: parent.right
         anchors.margins: 5
 
-        width: height
-        opacity: 0.7
+        style: ButtonStyle {
+          background: Rectangle {
+            implicitWidth: 25
+            implicitHeight:25
+            border.width: control.activeFocus ? 2 : 1
+            border.color: "#888"
+            radius: 4
+            opacity: 0.7
 
-        onClicked: tool_bar.visible = !tool_bar.visible
+            gradient: Gradient {
+                GradientStop { position: 0 ; color: control.pressed ? "#ccc" : "#eee" }
+                GradientStop { position: 1 ; color: control.pressed ? "#aaa" : "#ccc" }
+            }
+
+            Image {
+              anchors.fill: parent
+              anchors.margins: 5
+              source: "qrc:/tools/gfx/tools_button"
+            }
+          }
+        }
+
+        onClicked: tools.visible = !tools.visible
       }
 
       Button {
         id: hid_bind_view_button
-        text: "?"
         anchors.top: tools_button.bottom
         anchors.right: parent.right
         anchors.margins: 5
 
-        width: height
-        opacity: 0.7
+        style: ButtonStyle {
+          background: Rectangle {
+            implicitWidth: 25
+            implicitHeight:25
+            border.width: control.activeFocus ? 2 : 1
+            border.color: "#888"
+            radius: 4
+            opacity: 0.7
+
+            gradient: Gradient {
+                GradientStop { position: 0 ; color: control.pressed ? "#ccc" : "#eee" }
+                GradientStop { position: 1 ; color: control.pressed ? "#aaa" : "#ccc" }
+            }
+
+            Image {
+              anchors.fill: parent
+              anchors.margins: 5
+              source: "qrc:/tools/gfx/hid_bind_view_button"
+            }
+          }
+        }
 
         onClicked: hid_bind_view.visible = !hid_bind_view.visible
       }
-
 
       HidBindingView {
         id: hid_bind_view

@@ -4,4 +4,8 @@
         <file>qml/components/HidBindingView.qml</file>
         <file>qml/components/TextureViewer.qml</file>
     </qresource>
+    <qresource prefix="/tools/gfx">
+        <file alias="hid_bind_view_button">gfx/help.svg</file>
+        <file alias="tools_button">gfx/settings.svg</file>
+    </qresource>
 </RCC>

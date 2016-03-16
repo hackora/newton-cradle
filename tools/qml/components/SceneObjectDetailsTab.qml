@@ -33,7 +33,6 @@ Item {
             Text{ text: "Identity:" }      Text{ id: info_identity }
             Text{ text: "Name:" }          Text{ id: info_name }
             Text{ text: "Virtual Name:" }  Text{ id: info_vname }
-            Text{ text: "Lighted:" }       CheckBox{ id: info_lighted }
           }
         }
 
@@ -59,13 +58,10 @@ Item {
             GroupBox { title: "Specular";   ColorPicker{ id: mat_spc; onColorChanged: root.updateMaterialOfSceneObject() } }
             GroupBox { title: "Shininess";  Slider{ id: mat_shininess; minimumValue: 0; maximumValue: 128; stepSize: 0.1; onValueChanged: root.updateMaterialOfSceneObject() } }
           }
-
-
         }
       }
     }
   }
-
 
   function updateMaterialOfSceneObject() {
 
@@ -75,9 +71,7 @@ Item {
     material.specular  = mat_spc.color
     material.shininess = mat_shininess.value
     model.setProperty(index,SceneProxyModel.SceneObject,"material",material)
-
   }
-
 
   Component.onCompleted: {
 
@@ -85,7 +79,6 @@ Item {
     info_identity.text    = model.getProperty(index,SceneProxyModel.SceneObject,"identity")
     info_name.text        = model.getProperty(index,SceneProxyModel.SceneObject,"name")
     info_vname.text       = model.getProperty(index,SceneProxyModel.SceneObject,"virtual_name")
-    info_lighted.checked  = model.getProperty(index,SceneProxyModel.SceneObject,"lighted")
 
     color_picker.color    = model.getProperty(index,SceneProxyModel.SceneObject,"color").qcolor
 
@@ -94,6 +87,6 @@ Item {
     mat_amb.color = material.ambient;
     mat_spc.color = material.specular;
     mat_shininess.value = material.shininess;
-
   }
+
 }
