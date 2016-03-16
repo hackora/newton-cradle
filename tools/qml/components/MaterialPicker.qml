@@ -4,8 +4,8 @@ import QtQuick.Controls 1.0
 
 Item {
   id: root
-  implicitHeight: cl.implicitHeight
-  implicitWidth: cl.implicitWidth
+  implicitHeight: dl.visible ? cl.implicitHeight + dl.implicitHeight : cl.implicitHeight
+  implicitWidth:  dl.visible ? Math.max(cl.implicitWidth,dl.implicitWidth) : cl.implicitWidth
 
   property alias ambient   : ambient_color_picker.color
   property alias diffuse   : diffuse_color_picker.color
@@ -14,16 +14,23 @@ Item {
   property string title : ""
   readonly property int left_pad : 5
 
+  signal materialChanged
 
   ColumnLayout {
     id: cl
     anchors.fill: parent
 
     Item {
+      Layout.preferredWidth:  height
+      Layout.preferredHeight: height
+      Layout.minimumWidth:    rl.implicitWidth
+      Layout.minimumHeight:   rl.implicitHeight
       Layout.fillWidth: true
+
       height: 20
 
       RowLayout {
+        id: rl
         anchors.fill: parent
         Text { id: title_text; anchors.fill: parent; text: root.title; font.bold: true }
         Item{ Layout.fillWidth: true }
@@ -37,7 +44,7 @@ Item {
     }
 
     GridLayout {
-      id: rl
+      id: dl
       visible: false
 
       Layout.fillWidth: true
@@ -58,8 +65,12 @@ Item {
     State {
       name: "details"
       PropertyChanges { target: simple_preview; visible: false }
-      PropertyChanges { target: rl; visible: true }
+      PropertyChanges { target: dl; visible: true }
     }
   ]
 
+  onAmbientChanged:   materialChanged()
+  onDiffuseChanged:   materialChanged()
+  onSpecularChanged:  materialChanged()
+  onShininessChanged: materialChanged()
 }

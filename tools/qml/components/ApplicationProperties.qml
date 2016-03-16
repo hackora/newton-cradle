@@ -33,14 +33,11 @@ Rectangle {
           }
         }
 
-        GroupBox {
+        ColorPicker{
+          id: clear_color;
+          title: "Clear color"
           Layout.fillWidth: true
-
-          title: "Clear Color"
-          ColorPicker{
-            id: clear_color;
-            onColorChanged: gmlibwrapper.setRCPairProperty(rcpairs.currentText,"clear_color",color)
-          }
+          onColorChanged: gmlibwrapper.setRCPairProperty(rcpairs.currentText,"clear_color",color)
         }
 
         Item { Layout.fillHeight: true }

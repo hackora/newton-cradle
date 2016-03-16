@@ -4,8 +4,8 @@ import QtQuick.Controls 1.0
 
 Item {
   id: root
-  implicitHeight: cl.implicitHeight
-  implicitWidth:  cl.implicitWidth
+  implicitHeight: dl.visible ? cl.implicitHeight + dl.implicitHeight : cl.implicitHeight
+  implicitWidth:  dl.visible ? Math.max(cl.implicitWidth,dl.implicitWidth) : cl.implicitWidth
 
   property color color : "#FFFF0000"  // ARGB
   property alias previewVisible : preview.visible
@@ -18,10 +18,16 @@ Item {
     anchors.fill: parent
 
     Item {
+      Layout.preferredWidth:  height
+      Layout.preferredHeight: height
+      Layout.minimumWidth:    rl.implicitWidth
+      Layout.minimumHeight:   rl.implicitHeight
       Layout.fillWidth: true
+
       height: 20
 
       RowLayout {
+        id: rl
         anchors.fill: parent
         Text { id: title_text; anchors.fill: parent; text: root.title; font.bold: true }
         Item{ Layout.fillWidth: true }
@@ -35,7 +41,7 @@ Item {
     }
 
     RowLayout {
-      id: rl
+      id: dl
       visible: false
       Layout.fillWidth: true
 
@@ -84,7 +90,7 @@ Item {
     State {
       name: "details"
       PropertyChanges { target: simple_preview; visible: false }
-      PropertyChanges { target: rl; visible: true }
+      PropertyChanges { target: dl; visible: true }
     }
   ]
 
