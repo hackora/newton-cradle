@@ -41,7 +41,10 @@ Rectangle {
 
       model: internal.model
 
-      onCurrentIndexChanged: details.displayIndexData(currentIndex)
+      onCurrentIndexChanged: {
+        details.displayIndexData(currentIndex)
+        model.selectSceneObject(currentIndex)
+      }
     }
 
     TabView {

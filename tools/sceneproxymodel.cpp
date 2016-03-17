@@ -140,6 +140,16 @@ SceneProxyModel::setSceneObjectProperty(GMlib::SceneObject& sceneobject, const Q
   return false;
 }
 
+void
+SceneProxyModel::selectSceneObject(const QModelIndex& index) const {
+
+  if(!index.isValid()) return;
+
+  scene()->clearSelection();
+  auto obj = static_cast<GMlib::SceneObject*>(index.internalPointer());
+  obj->setSelected(true);
+}
+
 QModelIndex
 SceneProxyModel::index(int row, int column, const QModelIndex& parent) const {
 

@@ -50,6 +50,7 @@ public:
   Q_INVOKABLE bool                    setProperty( const QModelIndex& index, int module, const QString& name, const QVariant& value );
   bool                                setSceneObjectProperty( GMlib::SceneObject& sceneobject, const QString& name, const QVariant& value );
 
+  Q_INVOKABLE void                    selectSceneObject( const QModelIndex& index ) const;
 
 
   // From QAbstractItemModel
