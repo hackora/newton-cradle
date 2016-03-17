@@ -4,45 +4,41 @@ import QtQml.Models 2.2
 import QtQuick.Layouts 1.1
 
 Rectangle {
+  id: root
+  property string active_rcpair : ""
 
   TabView {
     anchors.fill: parent
 
     Tab {
-      title: "RCPairs"
+      title: "Active RCPair"
 
       ColumnLayout {
         anchors.fill: parent
-
-        ComboBox {
-          id: rcpairs
-          Layout.fillWidth: true
-
-          Component.onCompleted: {
-
-            model = gmlibwrapper.getRCPairNamesList();
-            clear_color.color = gmlibwrapper.getRCPairProperty(currentText,"clear_color")
-          }
-
-          onCurrentIndexChanged: {
-
-            if(currentIndex === undefined ) return;
-            if(!currentText.length) return;
-
-            clear_color.color = gmlibwrapper.getRCPairProperty(currentText,"clear_color")
-          }
-        }
 
         ColorPicker{
           id: clear_color;
           title: "Clear color"
           Layout.fillWidth: true
-          onColorChanged: gmlibwrapper.setRCPairProperty(rcpairs.currentText,"clear_color",color)
+          onColorChanged: gmlibwrapper.setRCPairProperty(root.active_rcpair,"clear_color",color)
+
+          signal fetchActiveRcPairProperties()
+
+          onFetchActiveRcPairProperties: {
+
+            if(!root.active_rcpair.length) return;
+            clear_color.color = gmlibwrapper.getRCPairProperty(root.active_rcpair,"clear_color")
+          }
+
+          Component.onCompleted: {
+            if(root.active_rcpair.length) clear_color.color = gmlibwrapper.getRCPairProperty(root.active_rcpair,"clear_color")
+
+            root.active_rcpairChanged.connect(fetchActiveRcPairProperties)
+          }
         }
 
         Item { Layout.fillHeight: true }
       }
     }
-
   }
 }

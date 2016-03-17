@@ -13,6 +13,10 @@ Item {
 
   signal toggleHidBindView
 
+  readonly property alias active_rcpair: rc_pair_cb.currentText
+
+  function getActiveRcPair() { return active_rcpair }
+
 
   SplitView {
     anchors.fill: parent
@@ -29,10 +33,11 @@ Item {
         anchors.fill: parent
 
         Tab {
+          id: app_tab
           title: "App"
 
           Component.onCompleted: {
-            setSource("qrc:/qml/components/ApplicationProperties.qml" )
+            setSource("qrc:/qml/components/ApplicationProperties.qml", {"active_rcpair" : Qt.binding(root.getActiveRcPair)} )
           }
         }
 
