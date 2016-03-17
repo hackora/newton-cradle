@@ -115,6 +115,7 @@ private:
 public:
   static GMlib::Color                         toGMlibColor( const QColor& color );
   static QColor                               toQColor( const GMlib::Color& color );
+  Q_INVOKABLE QVariant                        createMaterial_GM();
 };
 
 

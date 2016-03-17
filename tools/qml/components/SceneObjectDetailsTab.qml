@@ -56,34 +56,41 @@ Item {
           horizontalScrollBarPolicy: Qt.ScrollBarAlwaysOff
 
           ColumnLayout {
-            ColorPicker{ id: color_picker; title: "Color"; Layout.fillWidth: true }
-            MaterialPicker { id: material_picker; title: "Material"; Layout.fillWidth: true }
+            ColorPicker{
+              id: color_picker; title: "Color"; Layout.fillWidth: true
+
+              Component.onCompleted: {
+
+                color = model.getProperty(index,SceneProxyModel.SceneObject,"color").qcolor
+                colorChanged.connect(updateColorOfSceneobject)
+              }
+
+              function updateColorOfSceneobject() { model.setProperty(index,SceneProxyModel.SceneObject,"color",color) }
+            }
+            MaterialPicker {
+              id: material_picker; title: "Material"; Layout.fillWidth: true
+
+              Component.onCompleted: {
+                var material = model.getProperty(index,SceneProxyModel.SceneObject,"material")
+                ambient   = material.ambient;
+                diffuse   = material.diffuse;
+                specular  = material.specular;
+                shininess = material.shininess;
+
+                materialChanged.connect(updateMaterialOfSceneobject)
+              }
+
+              function updateMaterialOfSceneobject() {
+
+                var material = model.createMaterial_GM()
+                material.ambient   = material_picker.ambient
+                material.diffuse   = material_picker.diffuse
+                material.specular  = material_picker.specular
+                material.shininess = material_picker.shininess
+                model.setProperty(index,SceneProxyModel.SceneObject,"material",material)
+              }
+            }
             Item {Layout.fillHeight: true; implicitWidth: content.width}
-          }
-
-          function updateColorOfSceneobject() {
-             model.setProperty(index,SceneProxyModel.SceneObject,"color",color)
-          }
-          function updateMaterialOfSceneobject() {
-
-            var material = model.getProperty(index,SceneProxyModel.SceneObject,"material")
-            material.ambient   = material_picker.ambient
-            material.diffuse   = material_picker.diffuse
-            material.specular  = material_picker.specular
-            material.shininess = material_picker.shininess
-            model.setProperty(index,SceneProxyModel.SceneObject,"material",material)
-          }
-
-          Component.onCompleted: {
-            color_picker.color    = model.getProperty(index,SceneProxyModel.SceneObject,"color").qcolor
-            var material = model.getProperty(index,SceneProxyModel.SceneObject,"material")
-            material_picker.ambient   = material.ambient;
-            material_picker.diffuse   = material.diffuse;
-            material_picker.specular  = material.specular;
-            material_picker.shininess = material.shininess;
-
-            color_picker.colorChanged.connect(updateColorOfSceneobject)
-            material_picker.materialChanged.connect(updateMaterialOfSceneobject)
           }
         }
 

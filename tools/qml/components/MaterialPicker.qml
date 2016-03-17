@@ -11,8 +11,8 @@ Item {
 
   property alias ambient   : ambient_color_picker.color
   property alias diffuse   : diffuse_color_picker.color
-  property color specular  : specular_color_picker.color
-  property real  shininess : shininess_slider.value
+  property alias specular  : specular_color_picker.color
+  property alias shininess : shininess_slider.value
   property string title : ""
   readonly property int left_pad : 5
 

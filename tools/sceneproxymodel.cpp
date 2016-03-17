@@ -324,3 +324,9 @@ SceneProxyModel::toQColor(const GMlib::Color& c) {
   return color;
 }
 
+QVariant
+SceneProxyModel::createMaterial_GM() {
+
+  return QVariant::fromValue(Material_GM());
+}
+
