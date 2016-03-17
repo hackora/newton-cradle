@@ -195,6 +195,31 @@ GMOpenGLProxyModel::getTextureProperty(const QModelIndex& index, const QString& 
       default:            return trgt;              // Look it up gdmn'it (way to much legwork for now)
     }
   }
+  else if(name == "width" or name == "height" or name == "depth") {
+
+    GLenum id     = itr->id;
+    GLenum target = itr->target;
+
+    GLCSWMakeCurrent context(_glsurface);
+    context.makeCurrent();
+
+    int size = 0;
+    int miplevel = 0;
+
+
+    GL_CHECK(::glBindTexture(target,id)); {
+
+      if( name == "width" and  ( target == GL_TEXTURE_1D or target == GL_TEXTURE_2D or target == GL_TEXTURE_3D ) )
+        GL_CHECK(::glGetTexLevelParameteriv(target,miplevel,GL_TEXTURE_WIDTH,&size));
+      else if( name == "height" and (target == GL_TEXTURE_2D or target == GL_TEXTURE_3D) )
+        GL_CHECK(::glGetTexLevelParameteriv(target,miplevel,GL_TEXTURE_HEIGHT,&size));
+      else if( name == "depth")
+        GL_CHECK(::glGetTexLevelParameteriv(target,miplevel,GL_TEXTURE_DEPTH,&size));
+
+    } GL_CHECK(::glBindTexture(target,GLuint(0)));
+
+    return size;
+  }
 
   return QVariant();
 }
