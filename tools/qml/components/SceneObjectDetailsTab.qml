@@ -56,10 +56,9 @@ Item {
           horizontalScrollBarPolicy: Qt.ScrollBarAlwaysOff
 
           ColumnLayout {
-            anchors.fill: parent
             ColorPicker{ id: color_picker; title: "Color"; Layout.fillWidth: true }
             MaterialPicker { id: material_picker; title: "Material"; Layout.fillWidth: true }
-            Item {Layout.fillHeight: true}
+            Item {Layout.fillHeight: true; implicitWidth: content.width}
           }
 
           function updateColorOfSceneobject() {

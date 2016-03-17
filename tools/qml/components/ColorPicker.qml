@@ -4,8 +4,10 @@ import QtQuick.Controls 1.0
 
 Item {
   id: root
-  implicitHeight: dl.visible ? cl.implicitHeight + dl.implicitHeight : cl.implicitHeight
-  implicitWidth:  dl.visible ? Math.max(cl.implicitWidth,dl.implicitWidth) : cl.implicitWidth
+  implicitHeight: cl.implicitHeight
+  implicitWidth:  cl.implicitWidth
+//  implicitHeight: dl.visible ? cl.implicitHeight + dl.implicitHeight : cl.implicitHeight
+//  implicitWidth:  dl.visible ? Math.max(cl.implicitWidth,dl.implicitWidth) : cl.implicitWidth
 
   property color color : "#FFFF0000"  // ARGB
   property alias previewVisible : preview.visible
