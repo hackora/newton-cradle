@@ -87,6 +87,11 @@ SceneProxyModel::getProperty(const QModelIndex& index, int module, const QString
 
   switch(PropertyModules(module)) {
     case PropertyModules::SceneObject: return getSceneObjectProperty(*obj,name);
+    case PropertyModules::PointLight:  {
+      auto point_light = dynamic_cast<GMlib::PointLight*>(obj);
+      if(point_light) return getPointLightProperty(point_light,name);
+      else return QVariant();
+    }
   }
 
   return getCustomProperty(obj,module,name);
@@ -105,8 +110,13 @@ SceneProxyModel::getSceneObjectProperty(const GMlib::SceneObject& sceneobject, c
   return QVariant();
 }
 
-QVariant SceneProxyModel::getPointLightProperty(const GMlib::PointLightG& pointlight, const QString& name) const {
+QVariant SceneProxyModel::getPointLightProperty(const GMlib::PointLight* pointlight, const QString& name) const {
 
+  if(     name == "ambient")  return QVariant::fromValue(Color_GM(pointlight->getAmbient()));
+  else if(name == "diffuse")  return QVariant::fromValue(Color_GM(pointlight->getDiffuse()));
+  else if(name == "specular") return QVariant::fromValue(Color_GM(pointlight->getSpecular()));
+
+  return QVariant();
 }
 
 bool
@@ -117,6 +127,11 @@ SceneProxyModel::setProperty(const QModelIndex& index, int module, const QString
 
   switch(PropertyModules(module)) {
     case PropertyModules::SceneObject: return setSceneObjectProperty(*obj,name,value);
+    case PropertyModules::PointLight:  {
+      auto point_light = dynamic_cast<GMlib::PointLight*>(obj);
+      if(point_light) return setPointLightProperty(point_light,name,value);
+      else return false;
+    }
   }
 
   return setCustomProperty(obj,module,name,value);
@@ -134,6 +149,25 @@ SceneProxyModel::setSceneObjectProperty(GMlib::SceneObject& sceneobject, const Q
 
     auto material = value.value<Material_GM>();
     sceneobject.setMaterial(material);
+    return true;
+  }
+
+  return false;
+}
+
+bool
+SceneProxyModel::setPointLightProperty(GMlib::PointLight* pointlight, const QString& name, const QVariant& value) const {
+
+  if(name == "ambient") {
+    pointlight->GMlib::Light::setColor( toGMlibColor(value.value<QColor>()), pointlight->getDiffuse(), pointlight->getSpecular() );
+    return true;
+  }
+  else if(name == "diffuse") {
+    pointlight->GMlib::Light::setColor( pointlight->getAmbient(), toGMlibColor(value.value<QColor>()), pointlight->getSpecular() );
+    return true;
+  }
+  else if(name == "specular") {
+    pointlight->GMlib::Light::setColor( pointlight->getAmbient(), pointlight->getDiffuse(), toGMlibColor(value.value<QColor>()) );
     return true;
   }
 
