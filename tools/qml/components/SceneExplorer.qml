@@ -81,7 +81,8 @@ Rectangle {
           // GMlib modules
           if(module === SceneProxyModel.SceneObject)      setupSceneObjectTab(addTab("SO"),index)
           else if(module === SceneProxyModel.Camera)      addTab("C",         template)
-          else if(module === SceneProxyModel.PointLight)  setupPointLightTab(addTab("PointLight"),index)
+          else if(module === SceneProxyModel.Light)       setupLightTab(      addTab("Light"),index)
+          else if(module === SceneProxyModel.PointLight)  setupPointLightTab( addTab("PointLight"),index)
           else if(module === SceneProxyModel.PSurf )      addTab("PSurf",     template)
           else if(module === SceneProxyModel.PERBSSurf )  addTab("PERBSSurf", template)
           else if(module === SceneProxyModel.PTorus )     addTab("PTorus",    template)
@@ -117,6 +118,11 @@ Rectangle {
   function setupSceneObjectTab(tab,index) {
 
     tab.setSource("qrc:/qml/components/SceneObjectDetailsTab.qml", {"model" : internal.model, "index": index} )
+  }
+
+  function setupLightTab(tab,index) {
+
+    tab.setSource("qrc:/qml/components/LightDetailsTab.qml", {"model" : internal.model, "index": index} )
   }
 
   function setupPointLightTab(tab,index) {

@@ -15,7 +15,7 @@ class GMlibWrapper;
 namespace GMlib {
   class Scene;
   class SceneObject;
-  class PointLight;
+  class Light;
   class Color;
 }
 #include <core/gmarray>
@@ -43,13 +43,13 @@ public:
   Q_INVOKABLE QVariantList            getPropertyModules( const QModelIndex& index ) const;
 
   Q_INVOKABLE QVariant                getProperty( const QModelIndex& index, int module, const QString& name ) const;
-  QVariant                            getSceneObjectProperty( const GMlib::SceneObject& sceneobject, const QString& name ) const;
-  QVariant                            getPointLightProperty( const GMlib::PointLight* pointlight, const QString& name ) const;
+  QVariant                            getSceneObjectProperty( const GMlib::SceneObject* sceneobject, const QString& name ) const;
+  QVariant                            getLightProperty( const GMlib::Light* pointlight, const QString& name ) const;
 
 
   Q_INVOKABLE bool                    setProperty( const QModelIndex& index, int module, const QString& name, const QVariant& value );
-  bool                                setSceneObjectProperty( GMlib::SceneObject& sceneobject, const QString& name, const QVariant& value );
-  bool                                setPointLightProperty( GMlib::PointLight* pointlight, const QString& name, const QVariant& value ) const;
+  bool                                setSceneObjectProperty( GMlib::SceneObject* sceneobject, const QString& name, const QVariant& value );
+  bool                                setLightProperty( GMlib::Light* pointlight, const QString& name, const QVariant& value ) const;
 
   Q_INVOKABLE void                    selectSceneObject( const QModelIndex& index ) const;
 
@@ -73,7 +73,9 @@ public:
     SceneObject   = 0,
 
     Camera,
-    PointLight,
+
+    Light,
+    SpotLight,
 
 
     PSurf,
