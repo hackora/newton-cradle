@@ -309,7 +309,7 @@ void DefaultHidManager::heRotateSelectedObjects(const HidInputEvent::HidInputPar
   for( int i = 0; i < objs.getSize(); ++i )
     if( objs(i)->getTypeId() != GM_SO_TYPE_SELECTOR )
       if( std::abs(pos(0)-prev(0)) > POS_TOLERANCE || std::abs(pos(1)-prev(1)) > POS_TOLERANCE )
-        no_objs > 1 ? objs(i)->rotate( ang, sphere.getPos(), rot_v) : objs(i)->rotate( ang, rot_v);
+        no_objs > 1 ? objs(i)->rotateGlobal( ang, sphere.getPos(), rot_v) : objs(i)->rotateGlobal( ang, rot_v);
 }
 
 void DefaultHidManager::heScaleSelectedObjects(const HidInputEvent::HidInputParams& params) {
