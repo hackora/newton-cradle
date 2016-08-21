@@ -25,8 +25,8 @@ public:
   void    trigger( const HidInputEvent::HidInputParams& params ) const;
 
 private:
-  QString         _name;
   QString         _group;
+  QString         _name;
   QString         _description;
   unsigned int    _custom_trigger;
 

@@ -167,6 +167,8 @@ QVariant HidManagerTreeModel::data(const QModelIndex &index, int role) const {
     case Qt::UserRole+2: return item->data(1);
     case Qt::UserRole+3: return item->data(2);
   }
+
+  return QVariant();
 }
 
 Qt::ItemFlags HidManagerTreeModel::flags(const QModelIndex &index) const {

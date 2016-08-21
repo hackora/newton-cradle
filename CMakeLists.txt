@@ -1,13 +1,26 @@
 # Minimum CMake version required
-cmake_minimum_required(VERSION 2.8.11)
+cmake_minimum_required(VERSION 3.1)
+
+# Specify compiler features
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
+
+
+message("CMAKE_CXX_COMPILER_ID: ${CMAKE_CXX_COMPILER_ID}")
+
+# Clang++
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+  set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-Weverything")  # -Weverything includes -pedantic and -Werror
+  # using Clang
+#elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+else()
+  set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-pedantic -Wall -Werror")
+  # using GCC
+endif()
 
 # Global name of the project
-project(GMlibQmlDemo)
+project(GMlibQmlDemo VERSION 0.1.0 LANGUAGES C CXX)
 
-# Version
-set(VERSION_MAJOR 0)
-set(VERSION_MINOR 1)
-set(VERSION_PATCH 0)
 
 # Adjust the CMAKE_MODULE_PATH to include the "local" cmake/Modules directory
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
@@ -28,7 +41,7 @@ find_package(Qt5Gui 5.1)
 ################################
 # Find GMlib
 find_package(
-  GMlib 0.5 EXACT
+  GMlib 0.9 EXACT
   PATHS ${GMLIB_DIR}
   NO_DEFAULT_PATH
 )
@@ -133,6 +146,4 @@ target_link_libraries( ${CMAKE_PROJECT_NAME}
   ${GLEW_LIBRARIES}
   ${OPENGL_LIBRARIES}
   )
-
-set_target_properties( ${CMAKE_PROJECT_NAME} PROPERTIES COMPILE_FLAGS "--std=c++11" )
 

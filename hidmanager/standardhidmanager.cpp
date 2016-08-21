@@ -233,6 +233,10 @@ void StandardHidManager::generateEvent() {
       case MOUSE_RELEASE:
         QCoreApplication::sendEvent( this, new HidInputEvent( MouseReleaseInput( _reg_mouse_buttons, _reg_keymods ), mouse_params ) );
         break;
+      case MOUSE_NONE:
+      case MOUSE_MOVE:
+      default:
+        assert(false);
     }
 
     registerMouseEventType( MOUSE_NONE );
@@ -246,6 +250,9 @@ void StandardHidManager::generateEvent() {
       case KEY_RELEASE: {
         QCoreApplication::sendEvent( this, new HidInputEvent( KeyReleaseInput( _reg_key_last_unreg, _reg_keymods ), key_params ) );
       } break;
+      case KEY_NONE:
+      default:
+        assert(false);
     }
 
     registerKeyEventType( KEY_NONE );

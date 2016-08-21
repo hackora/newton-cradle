@@ -12,6 +12,7 @@
 #include <QQmlContext>
 #include <QQuickItem>
 #include <QStringListModel>
+#include <QOpenGLContext>
 
 // stl
 #include <cassert>
@@ -62,6 +63,8 @@ GuiApplication::~GuiApplication() {
 
 void
 GuiApplication::onSceneGraphInitialized() {
+
+  qDebug() << "GL context: " << QOpenGLContext::currentContext()->format();
 
   // Init GMlibWrapper
   _scenario.initialize();

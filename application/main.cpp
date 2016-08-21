@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) try {
 
 
   // Checking GMlib Version
-  if( GM_VERSION < GM_VERSION_CHECK( 0,5, 0 ) ) {
+  if( GM_VERSION < GM_VERSION_CHECK( 0,9, 0 ) ) {
 
     QString critical = QString(
       "GMlib version %1 not supported."

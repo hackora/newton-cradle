@@ -39,4 +39,6 @@ Window::Window(QWindow *parent) : QQuickView(parent) {
 
   QSurfaceFormat::setDefaultFormat(format);
   setFormat(format);
+
+  create();
 }
