@@ -26,7 +26,7 @@ void Simulator::setupSimulator()
 {
 
     _dspheres.push_back(std::make_unique<DynSphere> ());
-    _dspheres.back()->velocity = GMlib::Vector<float,3> (1.0f, 1.0f, 0.0f);
+    _dspheres.back()->velocity = GMlib::Vector<double,3> (1.0f, 1.0f, 0.0f);
 
    _planes.push_back(
       std::make_unique<Plane> (    GMlib::Point<float, 3> (-10.0f, -10.0f, 5.0f),
