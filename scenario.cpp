@@ -2,6 +2,8 @@
 
 #include "testtorus.h"
 
+#include "simulator.h"
+
 //// hidmanager
 //#include "hidmanager/defaulthidmanager.h"
 
@@ -14,6 +16,7 @@
 #include <QQuickItem>
 
 
+//
 
 void Scenario::initializeScenario() {
 
@@ -59,17 +62,18 @@ void Scenario::initializeScenario() {
   // Top cam
   auto top_rcpair = createRCPair("Top");
   top_rcpair.camera->set( init_cam_pos + GMlib::Vector<float,3>( 0.0f, 0.0f, 50.0f ), -init_cam_up, init_cam_dir );
-  top_rcpair.camera->setCuttingPlanes( 1.0f, 8000.0f );
+  top_rcpair.camera->setCuttingPlanes( 1.0f, 20.0f );
   scene()->insertCamera( top_rcpair.camera.get() );
   top_rcpair.renderer->reshape( GMlib::Vector<int,2>(init_viewport_size, init_viewport_size) );
 
 
+  _simulator = std::make_shared<Simulator>(*scene());
+  _simulator->setupSimulator();
 
 
 
-
-
-  // Surface visualizers
+//default scenario (torus)
+  /*// Surface visualizers
   auto surface_visualizer = new GMlib::PSurfNormalsVisualizer<float,3>;
 
   // Surface
@@ -79,10 +83,12 @@ void Scenario::initializeScenario() {
   surface->replot(200,200,1,1);
   scene()->insert(surface);
 
-  surface->test01();
+  surface->test01();*/
 
 }
 
 void Scenario::cleanupScenario() {
+
+    _simulator.reset();
 
 }

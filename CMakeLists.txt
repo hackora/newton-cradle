@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.4)
 
 # Global name of the project
-project(GMlibQmlDemo VERSION 0.1.0 LANGUAGES CXX)
+project(newton_cradle VERSION 0.1.0 LANGUAGES CXX)
 
 # Specify compiler features
 set(CMAKE_CXX_STANDARD 14)
@@ -84,6 +84,22 @@ if(WIN32)
   add_definitions(-DGLEW_STATIC)
 endif(WIN32)
 
+message("COLLISION_INTERFACE_INCLUDE_DIR: ${COLLISION_INTERFACE_INCLUDE_DIR}")
+if(NOT COLLISION_INTERFACE_INCLUDE_DIR)
+  message( FATAL_ERROR "COLLISION_INTERFACE_INCLUDE_DIR not set")
+endif()
+
+
+include_directories(${COLLISION_INTERFACE_INCLUDE_DIR})
+
+message("COLLISION_LIBRARY_INCLUDE_DIR: ${COLLISION_LIBRARY_INCLUDE_DIR}")
+if(NOT COLLISION_LIBRARY_INCLUDE_DIR)
+  message( FATAL_ERROR "COLLISION_LIBRARY_INCLUDE_DIR not set")
+endif()
+
+
+include_directories(${COLLISION_LIBRARY_INCLUDE_DIR} ${COLLISION_LIBRARY_INCLUDE_DIRS} ${COLLISION_LIBRARY_INCLUDE_DIR})
+link_directories(${COLLISION_LIBRARY_INCLUDE_DIR})
 
 
 
@@ -109,6 +125,7 @@ set( HDRS
 
   testtorus.h
   scenario.h
+  simulator.h
   )
 
 set( SRCS
@@ -130,6 +147,7 @@ set( SRCS
   application/main.cpp
 
   scenario.cpp
+  simulator.cpp
   )
 
 #########
@@ -171,6 +189,7 @@ target_link_libraries( ${CMAKE_PROJECT_NAME}
   Qt5::Gui
   ${GLEW_LIBRARIES}
   ${OPENGL_LIBRARIES}
+  ${COLLISION_LIBRARIES}
   )
 
 
