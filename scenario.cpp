@@ -71,7 +71,6 @@ void Scenario::initializeScenario() {
   _simulator->setupSimulator();
 
 
-
 //default scenario (torus)
   /*// Surface visualizers
   auto surface_visualizer = new GMlib::PSurfNormalsVisualizer<float,3>;

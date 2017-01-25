@@ -15,7 +15,7 @@ using DynSphereVector = std::vector<std::unique_ptr<DynSphere>>;
 using PlaneVector =  std::vector<std::unique_ptr<Plane>>;
 
 
-class SimulationController : public GMlib::SceneObject{
+/*class SimulationController : public GMlib::SceneObject{
     GM_SCENEOBJECT(SimulationController)
 public:
     SimulationController() = default;
@@ -30,7 +30,7 @@ private:
     PlanePtrVector         _planes;
 
 
-};
+};*/
 class Simulator{
 public:
     explicit Simulator ( GMlib::Scene& scene);
@@ -39,7 +39,7 @@ public:
 
 private:
     GMlib::Scene&            _scene;
-    SimulationController     _controller;
+    collision::MyController  _controller;
     DynSphereVector          _dspheres;
     PlaneVector              _planes;
 
