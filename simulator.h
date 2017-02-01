@@ -38,10 +38,10 @@ public:
     void setupSimulator();
 
 private:
-    GMlib::Scene&            _scene;
-    collision::MyController  _controller;
-    DynSphereVector          _dspheres;
-    PlaneVector              _planes;
+    GMlib::Scene&                    _scene;
+    collision::collision_controller  _controller;
+    DynSphereVector                  _dspheres;
+    PlaneVector                      _planes;
 
     template <typename T>
     void prepareAndInsert(const std::unique_ptr<T>& obj, int m1, int m2, int d1, int d2);
