@@ -9,10 +9,13 @@
 //helper types
 using DynSphere = collision::DynamicPhysObject<GMlib::PSphere<float>>;
 using Plane = collision::StaticPhysObject<GMlib::PPlane<float>>;
+using Bezier = collision::StaticPBezierSurf;
 using DynSpherePtrVector = std::vector<DynSphere*>; //raw pointer
 using PlanePtrVector =  std::vector<Plane*>;        //raw pointer
+using BezierPtrVector =  std::vector<Bezier*>;        //raw pointer
 using DynSphereVector = std::vector<std::unique_ptr<DynSphere>>;
 using PlaneVector =  std::vector<std::unique_ptr<Plane>>;
+using BezierVector = std::vector<std::unique_ptr<Bezier>>;
 
 
 /*class SimulationController : public GMlib::SceneObject{
@@ -27,7 +30,7 @@ protected:
 
 private:
     DynSpherePtrVector     _dspheres;
-    PlanePtrVector         _planes;
+    PlanePtrVector                _planes;
 
 
 };*/
@@ -36,12 +39,15 @@ public:
     explicit Simulator ( GMlib::Scene& scene);
 
     void setupSimulator();
+    void setupGame();
 
 private:
-    GMlib::Scene&                    _scene;
-    collision::collision_controller  _controller;
-    DynSphereVector                  _dspheres;
-    PlaneVector                      _planes;
+    GMlib::Scene&                                      _scene;
+    collision::collision_controller          _controller;
+    DynSphereVector                               _dspheres;
+    PlaneVector                                          _planes;
+    BezierVector                                        _beziers;
+
 
     template <typename T>
     void prepareAndInsert(const std::unique_ptr<T>& obj, int m1, int m2, int d1, int d2);
