@@ -181,6 +181,34 @@ void Simulator::setupGame(){
      _beziers.back()->setMaterial(GMlib::GMmaterial::polishedSilver());
 
 
+     //Balls on surface
+
+     _dspheres.push_back(std::make_unique<DynSphere> (0.5));
+     _dspheres.back()->velocity = GMlib::Vector<double,3> (0.0f, 0.0f, 0.0f);
+     _dspheres.back()->translateGlobal(GMlib::Vector<float,3>{0.0f,-3.0f,-2.5f});
+     _dspheres.back()->setMaterial(GMlib::GMmaterial::blackRubber());
+
+     _dspheres.push_back(std::make_unique<DynSphere> (0.5));
+     _dspheres.back()->velocity = GMlib::Vector<double,3> (0.0f, 0.0f, 0.0f);
+     _dspheres.back()->translateGlobal(GMlib::Vector<float,3>{1.0f,-3.0f,-2.5f});
+     _dspheres.back()->setMaterial(GMlib::GMmaterial::blackRubber());
+
+     _dspheres.push_back(std::make_unique<DynSphere> (0.5));
+     _dspheres.back()->velocity = GMlib::Vector<double,3> (0.0f, 0.0f, 0.0f);
+     _dspheres.back()->translateGlobal(GMlib::Vector<float,3>{-1.0f,-3.0f,-2.5f});
+     _dspheres.back()->setMaterial(GMlib::GMmaterial::blackRubber());
+
+     _dspheres.push_back(std::make_unique<DynSphere> (0.5));
+     _dspheres.back()->velocity = GMlib::Vector<double,3> (0.0f, 0.0f, 0.0f);
+     _dspheres.back()->translateGlobal(GMlib::Vector<float,3>{2.0f,-3.0f,-2.5f});
+     _dspheres.back()->setMaterial(GMlib::GMmaterial::blackRubber());
+
+     _dspheres.push_back(std::make_unique<DynSphere> (0.5));
+     _dspheres.back()->velocity = GMlib::Vector<double,3> (0.0f, 0.0f, 0.0f);
+     _dspheres.back()->translateGlobal(GMlib::Vector<float,3>{-2.0f,-3.0f,-2.5f});
+     _dspheres.back()->setMaterial(GMlib::GMmaterial::blackRubber());
+
+
     for (auto& bezier: _beziers)
         prepareAndInsert(bezier, 10, 10, 1,1);
 
