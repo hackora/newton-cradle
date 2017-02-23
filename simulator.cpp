@@ -138,27 +138,27 @@ void Simulator::setupGame(){
     _dspheres.push_back(std::make_unique<DynSphere> ());
     _dspheres.back()->velocity = GMlib::Vector<double,3> (0.0f, 0.0f, 0.0f);
     _dspheres.back()->translateGlobal(GMlib::Vector<float,3>{0.0f,5.0f,2.0f});
-    _dspheres.back()->setMaterial(GMlib::GMmaterial::polishedRed());
+    _dspheres.back()->setMaterial(GMlib::GMmaterial::pewter());
 
     _dspheres.push_back(std::make_unique<DynSphere> ());
     _dspheres.back()->velocity = GMlib::Vector<double,3> (0.0f, 0.0f, 0.0f);
     _dspheres.back()->translateGlobal(GMlib::Vector<float,3>{1.9f,5.0f,2.0f});
-    _dspheres.back()->setMaterial(GMlib::GMmaterial::polishedRed());
+    _dspheres.back()->setMaterial(GMlib::GMmaterial::jade());
 
     _dspheres.push_back(std::make_unique<DynSphere> ());
     _dspheres.back()->velocity = GMlib::Vector<double,3> (0.0f, 0.0f, 0.0f);
     _dspheres.back()->translateGlobal(GMlib::Vector<float,3>{-1.9f,5.0f,2.0f});
-    _dspheres.back()->setMaterial(GMlib::GMmaterial::polishedRed());
+    _dspheres.back()->setMaterial(GMlib::GMmaterial::obsidian());
 
     _dspheres.push_back(std::make_unique<DynSphere> ());
     _dspheres.back()->velocity = GMlib::Vector<double,3> (0.0f, 0.0f, 0.0f);
     _dspheres.back()->translateGlobal(GMlib::Vector<float,3>{3.8f,5.0f,2.0f});
-    _dspheres.back()->setMaterial(GMlib::GMmaterial::polishedRed());
+    _dspheres.back()->setMaterial(GMlib::GMmaterial::chrome());
 
     _dspheres.push_back(std::make_unique<DynSphere> ());
     _dspheres.back()->velocity = GMlib::Vector<double,3> (0.0f, 0.0f, 0.0f);
     _dspheres.back()->translateGlobal(GMlib::Vector<float,3>{-3.8f,5.0f,2.0f});
-    _dspheres.back()->setMaterial(GMlib::GMmaterial::polishedRed());
+    _dspheres.back()->setMaterial(GMlib::GMmaterial::plastic());
 
 
 
@@ -178,7 +178,7 @@ void Simulator::setupGame(){
     _beziers.push_back(std::make_unique<Bezier>(bs_cp));
     _beziers.back()->translateGlobal(GMlib::Vector<float,3>{5.0f,0.0f,-4.0f});
     _beziers.back()->rotate( GMlib::Angle(-45) , GMlib::Vector<float,3>( 1.0f, 0.0f, 0.0f ) );
-     _beziers.back()->setMaterial(GMlib::GMmaterial::polishedSilver());
+     _beziers.back()->setMaterial(GMlib::GMmaterial::sapphire());
 
 
      //Balls on surface
