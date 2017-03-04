@@ -10,6 +10,7 @@
 #include <gmParametricsModule>
 
 // Qt
+#include<QCoreApplication>
 #include <QTimerEvent>
 #include <QRectF>
 #include <QMouseEvent>
@@ -49,7 +50,7 @@ GMlibWrapper::~GMlibWrapper() {
   _instance.release();
 }
 
-void GMlibWrapper::toggleSimulation() {  _scene->toggleRun(); }
+void GMlibWrapper::toggleSimulation() {_scene->toggleRun();}
 
 
 void GMlibWrapper::render( const QString& name, const QRect& viewport_in, GMlib::RenderTarget& target ) {
@@ -85,7 +86,7 @@ void GMlibWrapper::timerEvent(QTimerEvent* e) {
 void GMlibWrapper::start() {
 
   if( _timer_id || _scene->isRunning() )
-    return;
+     return;
 
   _timer_id = startTimer(16, Qt::PreciseTimer);
   _scene->start();
@@ -191,8 +192,12 @@ RenderCamPair& GMlibWrapper::createRCPair(const QString& name) {
 
   auto rc_pair = RenderCamPair {};
 
+  GMlib::Point<float,3> init_cam_pos(  0.0f, 0.0f, 0.0f );
+  GMlib::Vector<float,3> init_cam_dir( 0.0f, 1.0f, 0.0f );
+  GMlib::Vector<float,3> init_cam_up(  0.0f, 0.0f, 1.0f );
+
   rc_pair.renderer = std::make_shared<GMlib::DefaultRenderer>();
-  rc_pair.camera = std::make_shared<GMlib::Camera>();
+  rc_pair.camera = std::make_shared<GMlib::Camera>(init_cam_pos, init_cam_dir, init_cam_up);
   rc_pair.renderer->setCamera(rc_pair.camera.get());
 
   return _rc_pairs[name.toStdString()] = rc_pair;
