@@ -64,7 +64,7 @@ void Scenario::initializeScenario() {
     _simulator = std::make_shared<Simulator>(*scene());
 
     _simulator->setupSimulator();
-    // _simulator->setupGame();
+    //     _simulator->setupGame();
 
 }
 

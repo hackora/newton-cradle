@@ -59,7 +59,7 @@ void Simulator::prepareAndInsertNoGravity(const std::unique_ptr<T>& obj, int m1,
     _scene.insert(obj.get());
     _controller.add(obj.get());
      auto sphere = dynamic_cast<DynSphere*>(obj.get());
-     sphere->environment = _controller._noGravity;
+     sphere->environment = &_controller._noGravity;
 }
 
 
