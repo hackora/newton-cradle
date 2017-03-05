@@ -147,6 +147,7 @@ set( SRCS
 
   scenario.cpp
   simulator.cpp
+  pendulum.cpp
   )
 
 #########
@@ -164,6 +165,7 @@ QT5_WRAP_CPP( HDRS_MOC
   application/window.h
 
   scenario.h
+  pendulum.h
   )
 
 set( RCCS

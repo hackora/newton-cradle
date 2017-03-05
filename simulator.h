@@ -35,6 +35,9 @@ private:
     template <typename T>
     void prepareAndInsert(const std::unique_ptr<T>& obj, int m1, int m2, int d1, int d2);
 
+    template <typename T>
+    void prepareAndInsertNoGravity(const std::unique_ptr<T>& obj, int m1, int m2, int d1, int d2);
+
 };
 
 template <typename T>
@@ -45,6 +48,18 @@ void Simulator::prepareAndInsert(const std::unique_ptr<T>& obj, int m1, int m2, 
     obj->replot(m1,m2,d1,d2);
     _scene.insert(obj.get());
     _controller.add(obj.get());
+}
+
+template <typename T>
+inline
+void Simulator::prepareAndInsertNoGravity(const std::unique_ptr<T>& obj, int m1, int m2, int d1, int d2){
+
+    obj->toggleDefaultVisualizer();
+    obj->replot(m1,m2,d1,d2);
+    _scene.insert(obj.get());
+    _controller.add(obj.get());
+     auto sphere = dynamic_cast<DynSphere*>(obj.get());
+     sphere->environment = _controller._noGravity;
 }
 
 
