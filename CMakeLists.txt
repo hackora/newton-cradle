@@ -123,7 +123,6 @@ set( HDRS
   application/window.h
   application/utils.h
 
-  testtorus.h
   scenario.h
   simulator.h
   )

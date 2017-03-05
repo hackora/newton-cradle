@@ -17,23 +17,6 @@ using DynSphereVector = std::vector<std::unique_ptr<DynSphere>>;
 using PlaneVector =  std::vector<std::unique_ptr<Plane>>;
 using BezierVector = std::vector<std::unique_ptr<Bezier>>;
 
-
-/*class SimulationController : public GMlib::SceneObject{
-    GM_SCENEOBJECT(SimulationController)
-public:
-    SimulationController() = default;
-    void add(DynSphere* const sphere); // const here means you can't delete the pointer or change to what it points to
-    void add(Plane* const plane);
-
-protected:
-    void localSimulate(double dt) override final; //should be named localSimulate if not compiler would complain
-
-private:
-    DynSpherePtrVector     _dspheres;
-    PlanePtrVector                _planes;
-
-
-};*/
 class Simulator{
 public:
     explicit Simulator ( GMlib::Scene& scene);
