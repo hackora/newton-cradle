@@ -47,79 +47,79 @@ void Simulator::setupSimulator()
     _planes.back()->setMaterial(GMlib::GMmaterial::polishedSilver());
 
 
-    // Example: a sphere becomes still then got hit by another sphere
+    // Scenario1:: a sphere becomes still then got hit by another sphere
 
-        _dspheres.push_back(std::make_unique<DynSphere> ());
-        _dspheres.back()->velocity = GMlib::Vector<double,3> (0.5f, 0.0f, 0.0f);
-        _dspheres.back()->mass = 2;
-        _dspheres.back()->translateGlobal(GMlib::Vector<float,3>{2.0f,3.0f,1.0f});
-        _dspheres.back()->setMaterial(GMlib::GMmaterial::polishedGreen());
+//        _dspheres.push_back(std::make_unique<DynSphere> ());
+//        _dspheres.back()->velocity = GMlib::Vector<double,3> (0.5f, 0.0f, 0.0f);
+//        _dspheres.back()->mass = 2;
+//        _dspheres.back()->translateGlobal(GMlib::Vector<float,3>{2.0f,3.0f,1.0f});
+//        _dspheres.back()->setMaterial(GMlib::GMmaterial::polishedGreen());
 
-        _dspheres.push_back(std::make_unique<DynSphere> ());
-        _dspheres.back()->velocity = GMlib::Vector<double,3> (1.0f, 0.0f,0.0f);
-        _dspheres.back()->translateGlobal(GMlib::Vector<float,3>{-5.0f,3.0f,5.0f});
-        _dspheres.back()->setMaterial(GMlib::GMmaterial::emerald());
-        _dspheres.back()->mass = 3;
+//        _dspheres.push_back(std::make_unique<DynSphere> ());
+//        _dspheres.back()->velocity = GMlib::Vector<double,3> (1.0f, 0.0f,0.0f);
+//        _dspheres.back()->translateGlobal(GMlib::Vector<float,3>{-5.0f,3.0f,5.0f});
+//        _dspheres.back()->setMaterial(GMlib::GMmaterial::emerald());
+//        _dspheres.back()->mass = 3;
 
-    //Example: many spheres inside the box : collision / impact / transition between different states
+    //Scenario2: many spheres inside the box : collision / impact / transition between different states
 
-    //    _dspheres.push_back(std::make_unique<DynSphere> ());
-    //    _dspheres.back()->velocity = GMlib::Vector<double,3> (0.0f, -5.0f, -4.0f);
-    //    _dspheres.back()->translateGlobal(GMlib::Vector<float,3>{0.0f,5.0f,5.0f});
-    //    _dspheres.back()->setMaterial(GMlib::GMmaterial::polishedRed());
+//        _dspheres.push_back(std::make_unique<DynSphere> ());
+//        _dspheres.back()->velocity = GMlib::Vector<double,3> (0.0f, -5.0f, -4.0f);
+//        _dspheres.back()->translateGlobal(GMlib::Vector<float,3>{0.0f,5.0f,5.0f});
+//        _dspheres.back()->setMaterial(GMlib::GMmaterial::polishedRed());
 
-    //    _dspheres.push_back(std::make_unique<DynSphere> ());
-    //    _dspheres.back()->velocity = GMlib::Vector<double,3> (-2.0f, 0.0f, 0.0f);
-    //    _dspheres.back()->translateGlobal(GMlib::Vector<float,3>{0.0f,5.0f,4.0f});
-    //    _dspheres.back()->setMaterial(GMlib::GMmaterial::polishedRed());
+//        _dspheres.push_back(std::make_unique<DynSphere> ());
+//        _dspheres.back()->velocity = GMlib::Vector<double,3> (-2.0f, 0.0f, 0.0f);
+//        _dspheres.back()->translateGlobal(GMlib::Vector<float,3>{0.0f,5.0f,4.0f});
+//        _dspheres.back()->setMaterial(GMlib::GMmaterial::polishedRed());
 
-    //    _dspheres.push_back(std::make_unique<DynSphere> ());
-    //    _dspheres.back()->velocity = GMlib::Vector<double,3> (-2.0f, 0.0f, 0.0f);
-    //    _dspheres.back()->translateGlobal(GMlib::Vector<float,3>{0.0f,0.0f,5.0f});
-    //    _dspheres.back()->setMaterial(GMlib::GMmaterial::polishedRed());
+//        _dspheres.push_back(std::make_unique<DynSphere> ());
+//        _dspheres.back()->velocity = GMlib::Vector<double,3> (-2.0f, 0.0f, 0.0f);
+//        _dspheres.back()->translateGlobal(GMlib::Vector<float,3>{0.0f,0.0f,5.0f});
+//        _dspheres.back()->setMaterial(GMlib::GMmaterial::polishedRed());
 
-    //    _dspheres.push_back(std::make_unique<DynSphere> ());
-    //    _dspheres.back()->velocity = GMlib::Vector<double,3> (5.0f, 5.0f, 2.0f);
-    //    _dspheres.back()->translateGlobal(GMlib::Vector<float,3>{0.0f,-4.0f,5.0f});
-    //    _dspheres.back()->setMaterial(GMlib::GMmaterial::polishedRed());
-
-
-    //    _dspheres.push_back(std::make_unique<DynSphere> ());
-    //    _dspheres.back()->velocity = GMlib::Vector<double,3> (0.0f,-1.0f,0.0f);
-    //    _dspheres.back()->translateGlobal(GMlib::Vector<float,3>{-3.0f,3.0f,5.0f});
-    //    _dspheres.back()->setMaterial(GMlib::GMmaterial::polishedRed());
+//        _dspheres.push_back(std::make_unique<DynSphere> ());
+//        _dspheres.back()->velocity = GMlib::Vector<double,3> (5.0f, 5.0f, 2.0f);
+//        _dspheres.back()->translateGlobal(GMlib::Vector<float,3>{0.0f,-4.0f,5.0f});
+//        _dspheres.back()->setMaterial(GMlib::GMmaterial::polishedRed());
 
 
-    //    _dspheres.push_back(std::make_unique<DynSphere> ());
-    //    _dspheres.back()->velocity = GMlib::Vector<double,3> (0.0f, -1.0f, 0.0f);
-    //    _dspheres.back()->translateGlobal(GMlib::Vector<float,3>{5.0f,3.0f,5.0f});
-    //    _dspheres.back()->setMaterial(GMlib::GMmaterial::polishedRed());
-
-    //    _dspheres.push_back(std::make_unique<DynSphere> ());
-    //    _dspheres.back()->velocity = GMlib::Vector<double,3> (0.0f, -1.0f, 0.0f);
-    //    _dspheres.back()->translateGlobal(GMlib::Vector<float,3>{1.5f,-3.0f,5.0f});
-    //    _dspheres.back()->setMaterial(GMlib::GMmaterial::polishedRed());
+//        _dspheres.push_back(std::make_unique<DynSphere> ());
+//        _dspheres.back()->velocity = GMlib::Vector<double,3> (0.0f,-1.0f,0.0f);
+//        _dspheres.back()->translateGlobal(GMlib::Vector<float,3>{-3.0f,3.0f,5.0f});
+//        _dspheres.back()->setMaterial(GMlib::GMmaterial::polishedRed());
 
 
-    // pendilum
+//        _dspheres.push_back(std::make_unique<DynSphere> ());
+//        _dspheres.back()->velocity = GMlib::Vector<double,3> (0.0f, -1.0f, 0.0f);
+//        _dspheres.back()->translateGlobal(GMlib::Vector<float,3>{5.0f,3.0f,5.0f});
+//        _dspheres.back()->setMaterial(GMlib::GMmaterial::polishedRed());
 
-//    _dspheres.push_back(std::make_unique<Pendulum> (1,1.0));
-//    _dspheres.back()->setMaterial(GMlib::GMmaterial::blackPlastic());
+//        _dspheres.push_back(std::make_unique<DynSphere> ());
+//        _dspheres.back()->velocity = GMlib::Vector<double,3> (0.0f, -1.0f, 0.0f);
+//        _dspheres.back()->translateGlobal(GMlib::Vector<float,3>{1.5f,-3.0f,5.0f});
+//        _dspheres.back()->setMaterial(GMlib::GMmaterial::polishedRed());
 
-//    _dspheres.push_back(std::make_unique<DynSphere> ());
-//    _dspheres.back()->velocity = GMlib::Vector<double,3> (0.0f, -5.0f, -4.0f);
-//    _dspheres.back()->translateGlobal(GMlib::Vector<float,3>{0.0f,5.0f,5.0f});
-//    _dspheres.back()->setMaterial(GMlib::GMmaterial::polishedRed());
 
-//    _dspheres.push_back(std::make_unique<DynSphere> ());
-//    _dspheres.back()->velocity = GMlib::Vector<double,3> (-2.0f, 0.0f, 0.0f);
-//    _dspheres.back()->translateGlobal(GMlib::Vector<float,3>{0.0f,5.0f,4.0f});
-//    _dspheres.back()->setMaterial(GMlib::GMmaterial::polishedRed());
+    //  Scenario3: Pendulum
 
-//    _dspheres.push_back(std::make_unique<DynSphere> ());
-//    _dspheres.back()->velocity = GMlib::Vector<double,3> (-2.0f, 0.0f, 0.0f);
-//    _dspheres.back()->translateGlobal(GMlib::Vector<float,3>{0.0f,0.0f,5.0f});
-//    _dspheres.back()->setMaterial(GMlib::GMmaterial::polishedRed());
+    _dspheres.push_back(std::make_unique<Pendulum> (1,1.0));
+    _dspheres.back()->setMaterial(GMlib::GMmaterial::blackPlastic());
+
+    _dspheres.push_back(std::make_unique<DynSphere> ());
+    _dspheres.back()->velocity = GMlib::Vector<double,3> (0.0f, -5.0f, -4.0f);
+    _dspheres.back()->translateGlobal(GMlib::Vector<float,3>{0.0f,5.0f,5.0f});
+    _dspheres.back()->setMaterial(GMlib::GMmaterial::polishedRed());
+
+    _dspheres.push_back(std::make_unique<DynSphere> ());
+    _dspheres.back()->velocity = GMlib::Vector<double,3> (-2.0f, 0.0f, 0.0f);
+    _dspheres.back()->translateGlobal(GMlib::Vector<float,3>{0.0f,5.0f,4.0f});
+    _dspheres.back()->setMaterial(GMlib::GMmaterial::polishedRed());
+
+    _dspheres.push_back(std::make_unique<DynSphere> ());
+    _dspheres.back()->velocity = GMlib::Vector<double,3> (-2.0f, 0.0f, 0.0f);
+    _dspheres.back()->translateGlobal(GMlib::Vector<float,3>{0.0f,0.0f,5.0f});
+    _dspheres.back()->setMaterial(GMlib::GMmaterial::polishedRed());
 
 
 
